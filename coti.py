@@ -9,7 +9,7 @@ from datetime import datetime
 def chaco():
     try:
         soup = BeautifulSoup(
-            urllib2.urlopen('http://www.cambioschaco.com.py/php/imprimir_.php').read())
+            urllib2.urlopen('http://www.cambioschaco.com.py/php/imprimir_.php').read(), "html.parser")
         compra = soup.find_all('tr')[3].contents[5].string[:5].replace('.', '')
         venta = soup.find_all('tr')[3].contents[7].string[:5].replace('.', '')
     except urllib2.URLError:
@@ -21,7 +21,7 @@ def chaco():
 def maxi():
     try:
         soup = BeautifulSoup(
-            urllib2.urlopen('http://www.maxicambios.com.py/').read())
+            urllib2.urlopen('http://www.maxicambios.com.py/').read(), "html.parser")
         compra = soup.find_all(class_='lineas1')[0].contents[
             7].string.replace('.', '')
         venta = soup.find_all(class_='lineas1')[0].contents[
@@ -35,7 +35,7 @@ def maxi():
 def alberdi():
     try:
         soup = BeautifulSoup(
-            urllib2.urlopen('http://www.cambiosalberdi.com/').read())
+            urllib2.urlopen('http://www.cambiosalberdi.com/').read(), "html.parser")
         compra = soup.find_all(
             class_="span2 pagination-right")[0].string.replace('.', '')
         venta = soup.find_all(
