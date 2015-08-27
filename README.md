@@ -1,7 +1,9 @@
 # dolarPy
-Checks USD/PYG exchange rate from several sites every 10 minutes, returns in a json
+Checks USD/PYG exchange rate from several sites every 10 minutes, returns json
 
 http://dolar.melizeche.com
+
+### Documentation in progress
 
 ## Install
 
