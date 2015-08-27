@@ -1,0 +1,6 @@
+#Configuration variables from https://apps.twitter.com/
+
+CONSUMER_KEY = 'abc123...'
+CONSUMER_SECRET = 'def456...'
+ACCESS_KEY = 'ghi789...'
+ACCESS_SECRET = 'jkl012...'

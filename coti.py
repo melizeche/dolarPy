@@ -69,8 +69,10 @@ def create_json():
     return json.dumps(respjson, sort_keys=True, indent=4, separators=(',', ': '))
 
 
-def print_output():
-    print create_json()
+def get_output():
+    with open('/tmp/dolar.json', 'r') as f:
+        response = f.read()
+    return response
 
 
 def write_output():
