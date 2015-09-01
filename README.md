@@ -1,9 +1,22 @@
 # dolarPy
-Checks USD/PYG exchange rate from several sites every 10 minutes, returns json
+
+* Webservice: (coti.py) Checks USD/PYG exchange rate from several sites every 10 minutes, displays in json
+* TwitterBot: Reads webservice output and tweet it(in a human readable format)
+
+"DEMO"
 
 http://dolar.melizeche.com
 
-### Documentation in progress
+https://twitter.com/DolarPy
+
+## Documentation in progress
+
+## Requirements
+
+* Python 2.7+
+* BeautifulSoup4
+* Flask
+* Tweepy
 
 ## Install
 
@@ -21,7 +34,7 @@ python cotiapp.py
 
 MIN 	HOUR 	DAYofMONTH 	MONTH 	DAYofWEEK 	PYTHONPATH SCRIPT
 
-So for check the exchange rate every 10 minutes between 6am and 8pm on weekdays
+So for check/update the exchange rate every 10 minutes between 6am and 8pm on weekdays
 
 ```*/10    6-20            * * 1-5 /apps/dolarPy/env/bin/python /apps/dolarPy/coti.py```
 
