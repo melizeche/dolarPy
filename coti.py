@@ -44,6 +44,8 @@ def alberdi():
         compra, venta = 0, 0
     return int(compra), int(venta)
 
+def bcp():
+    pass
 
 def create_json():
     mcompra, mventa = maxi()
