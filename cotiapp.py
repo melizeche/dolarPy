@@ -8,6 +8,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
+    return api_root()
+
+
+@app.route("/api/1.0/")
+def api_root():
     response = ""
     try:
         with open('/tmp/dolar.json', 'r') as f:
