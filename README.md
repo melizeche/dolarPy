@@ -3,9 +3,11 @@
 * Webservice: (coti.py) Checks USD/PYG exchange rate from several sites every 10 minutes, displays in json
 * TwitterBot: Reads webservice output and tweet it(in a human readable format)
 
-"DEMO"
+#### DEMO/Webservice
 
-http://dolar.melizeche.com
+http://dolar.melizeche.com/api/1.0/
+
+#### Twitter Bot
 
 https://twitter.com/DolarPy
 
