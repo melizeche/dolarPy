@@ -2,3 +2,4 @@ beautifulsoup4
 flask
 tweepy
 gunicorn
+flask-cors

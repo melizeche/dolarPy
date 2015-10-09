@@ -1,10 +1,12 @@
 import json
 from datetime import datetime
 from flask import Flask, Response
+from flask.ext.cors import CORS
 
 from coti import create_json, write_output
-app = Flask(__name__)
 
+app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route("/")
 def hello():
