@@ -1,11 +1,16 @@
 #!/usr/bin/python
 import json
-import urllib2
 import requests
-
+    
+from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+
+def decimal_default(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
 
 def chaco():
     try:
@@ -45,31 +50,54 @@ def alberdi():
         compra, venta = 0, 0
     return int(compra), int(venta)
 
+
 def bcp():
-    pass
+    soup = BeautifulSoup(
+        requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/monedas', timeout=8, 
+            headers={'user-agent': 'Mozilla/5.0'}).text, "html.parser")
+    ref = soup.select('#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)')[0].get_text()
+    ref = ref.replace('.','').replace(',','.')
+    soup = BeautifulSoup(
+        requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante', timeout=8, 
+            headers={'user-agent': 'Mozilla/5.0'}).text, "html.parser")
+    compra_array = soup.find(class_="table table-striped table-bordered table-condensed").select('tr > td:nth-of-type(4)')
+    venta_array = soup.find(class_="table table-striped table-bordered table-condensed").select('tr > td:nth-of-type(5)')
+    posicion = len(compra_array) - 1
+    compra = compra_array[posicion].get_text().replace('.','').replace(',','.')
+    venta = venta_array[posicion].get_text().replace('.','').replace(',','.')
+
+    return Decimal(compra), Decimal(venta), Decimal(ref)
+    
+
 
 def create_json():
     mcompra, mventa = maxi()
     ccompra, cventa = chaco()
     acompra, aventa = alberdi()
+    bcpcompra,bcpventa,bcpref = bcp()
     respjson = {
         'dolarpy': {
-            'maxicambios': {
-                'compra': mcompra,
-                'venta': mventa
+            'cambiosalberdi': {
+                'compra': acompra,
+                'venta': aventa
             },
             'cambioschaco': {
                 'compra': ccompra,
                 'venta': cventa
             },
-            'cambiosalberdi': {
-                'compra': acompra,
-                'venta': aventa
-            }
+            'maxicambios': {
+                'compra': mcompra,
+                'venta': mventa
+            },
+            'bcp': {
+                'compra': bcpcompra,
+                'venta': bcpventa,
+                'referencial_diario': bcpref
+            },
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
-    return json.dumps(respjson, sort_keys=True, indent=4, separators=(',', ': '))
+    return json.dumps(respjson, indent=4, sort_keys=True, separators=(',', ': '), default=decimal_default)
 
 
 def get_output():
