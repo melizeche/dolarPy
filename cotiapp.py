@@ -1,17 +1,16 @@
 import json
 from datetime import datetime
-from flask import Flask, Response
+from flask import Flask, Response, render_template,send_from_directory
 from flask.ext.cors import CORS
 
 from coti import create_json, write_output
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route("/")
-def hello():
-    return api_root()
-
+def index():
+    return render_template('index.html')
 
 @app.route("/api/1.0/")
 def api_root():
