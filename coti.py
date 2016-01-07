@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 import json
 import requests
 
@@ -16,15 +17,15 @@ def decimal_default(obj):
 def chaco():
     try:
         soup = BeautifulSoup(
-            requests.get('http://www.cambioschaco.com.py/php/imprimir_.php', timeout=8).text, "html.parser")
-        compra = soup.find_all('tr')[3].contents[5].string[:5].replace('.', '')
-        venta = soup.find_all('tr')[3].contents[7].string[:5].replace('.', '')
+            requests.get('http://www.cambioschaco.com.py/', timeout=8).text, "html.parser")
+        compra = soup.find_all(class_='purchase')[0].contents[0].replace('.','')
+        venta = soup.find_all(class_='sale')[0].contents[0].replace('.','')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except TypeError:
         compra, venta = 0, 0
 
-    return int(compra), int(venta)
+    return Decimal(compra), Decimal(venta)
 
 
 def maxi():
@@ -40,7 +41,7 @@ def maxi():
     except TypeError:
         compra, venta = 0, 0
 
-    return int(compra), int(venta)
+    return Decimal(compra), Decimal(venta)
 
 
 def alberdi():
@@ -56,7 +57,7 @@ def alberdi():
     except TypeError:
         compra, venta = 0, 0
 
-    return int(compra), int(venta)
+    return Decimal(compra), Decimal(venta)
 
 
 def bcp():

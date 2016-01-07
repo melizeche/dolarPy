@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import json
 from datetime import datetime
 from flask import Flask, Response, render_template,send_from_directory
