@@ -22,7 +22,7 @@ def chaco():
         venta = soup.find_all(class_='sale')[0].contents[0].replace('.','')
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except TypeError:
+    except:
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -38,7 +38,7 @@ def maxi():
             5].string.replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except TypeError:
+    except:
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -54,7 +54,7 @@ def alberdi():
             class_="span2 pagination-right")[1].string.replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except TypeError:
+    except:
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -82,7 +82,7 @@ def bcp():
             '.', '').replace(',', '.')
     except requests.ConnectionError:
         compra, venta, ref = 0, 0, 0
-    except TypeError:
+    except:
         compra, venta, ref = 0, 0, 0
 
     return Decimal(compra), Decimal(venta), Decimal(ref)
