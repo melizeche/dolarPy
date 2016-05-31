@@ -140,14 +140,14 @@ def create_json():
 
 
 def get_output():
-    with open('/tmp/dolar.json', 'r') as f:
+    with open('dolar.json', 'r') as f:
         response = f.read()
     return response
 
 
 def write_output():
     response = create_json()
-    with open('/tmp/dolar.json', 'w') as f:
+    with open('dolar.json', 'w') as f:
         f.write(response)
 
 write_output()
