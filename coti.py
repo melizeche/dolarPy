@@ -85,12 +85,29 @@ def bcp():
 
     return Decimal(compra), Decimal(venta), Decimal(ref)
 
+def setgov():
+    try:
+        soup = BeautifulSoup(
+            requests.get('http://www.set.gov.py/portal/PARAGUAY-SET', timeout=8).text, "html.parser")
+        compra = soup.find_all(
+            'span', style="font-family:arial,helvetica,sans-serif;").pop(0).select('span')[0].contents[
+                     0].string.replace('.', '')[2::]
+        venta = soup.find_all(
+            'span', style="font-family:arial,helvetica,sans-serif;").pop(1).select('span')[0].contents[
+                    0].string.replace('.', '')[2::]
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
 
 def create_json():
     mcompra, mventa = maxi()
     ccompra, cventa = chaco()
     acompra, aventa = alberdi()
     bcpcompra, bcpventa, bcpref = bcp()
+    setcompra, setventa = setgov()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -110,6 +127,10 @@ def create_json():
                 'venta': bcpventa,
                 'referencial_diario': bcpref
             },
+            'set': {
+                'compra': setcompra,
+                'venta': setventa
+            },
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
@@ -117,14 +138,14 @@ def create_json():
 
 
 def get_output():
-    with open('/tmp/dolar.json', 'r') as f:
+    with open('dolar.json', 'r') as f:
         response = f.read()
     return response
 
 
 def write_output():
     response = create_json()
-    with open('/tmp/dolar.json', 'w') as f:
+    with open('dolar.json', 'w') as f:
         f.write(response)
 
 write_output()
