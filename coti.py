@@ -46,12 +46,10 @@ def maxi():
 
 def alberdi():
     try:
-        soup = BeautifulSoup(
-            requests.get('http://www.cambiosalberdi.com/', timeout=8).text, "html.parser")
-        compra = soup.find_all(
-            class_="span2 pagination-right")[0].string.replace('.', '')
-        venta = soup.find_all(
-            class_="span2 pagination-right")[1].string.replace('.', '')
+        soup = json.loads(
+            requests.get("http://www.cambiosalberdi.com/customscripts/ajax/getCotizaciones.php").text)
+        compra =  soup['asuncion'][0]['compra'].replace('.','')
+        venta = soup['asuncion'][0]['venta'].replace('.','')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
