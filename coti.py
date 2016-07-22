@@ -17,7 +17,7 @@ def decimal_default(obj):
 def chaco():
     try:
         soup = BeautifulSoup(
-            requests.get('http://www.cambioschaco.com.py/', timeout=8).text, "html.parser")
+            requests.get('http://www.cambioschaco.com.py/', timeout=10).text, "html.parser")
         compra = soup.find_all(class_='purchase')[0].contents[0].replace('.','')
         venta = soup.find_all(class_='sale')[0].contents[0].replace('.','')
     except requests.ConnectionError:
@@ -31,7 +31,7 @@ def chaco():
 def maxi():
     try:
         soup = BeautifulSoup(
-            requests.get('http://www.maxicambios.com.py/', timeout=8).text, "html.parser")
+            requests.get('http://www.maxicambios.com.py/', timeout=10).text, "html.parser")
         compra = soup.find_all(class_='lineas1')[0].contents[
             7].string.replace('.', '')
         venta = soup.find_all(class_='lineas1')[0].contents[
@@ -47,7 +47,7 @@ def maxi():
 def alberdi():
     try:
         soup = json.loads(
-            requests.get("http://www.cambiosalberdi.com/customscripts/ajax/getCotizaciones.php").text)
+            requests.get('http://www.cambiosalberdi.com/customscripts/ajax/getCotizaciones.php', timeout=10).text)
         compra =  soup['asuncion'][0]['compra'].replace('.','')
         venta = soup['asuncion'][0]['venta'].replace('.','')
     except requests.ConnectionError:
@@ -61,13 +61,13 @@ def alberdi():
 def bcp():
     try:
         soup = BeautifulSoup(
-            requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/monedas', timeout=8,
+            requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/monedas', timeout=10,
                          headers={'user-agent': 'Mozilla/5.0'}).text, "html.parser")
         ref = soup.select(
             '#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)')[0].get_text()
         ref = ref.replace('.', '').replace(',', '.')
         soup = BeautifulSoup(
-            requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante', timeout=8,
+            requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante', timeout=10,
                          headers={'user-agent': 'Mozilla/5.0'}).text, "html.parser")
         compra_array = soup.find(
             class_="table table-striped table-bordered table-condensed").select('tr > td:nth-of-type(4)')
@@ -88,7 +88,7 @@ def bcp():
 def setgov():
     try:
         soup = BeautifulSoup(
-            requests.get('http://www.set.gov.py/portal/PARAGUAY-SET', timeout=8).text, "html.parser")
+            requests.get('http://www.set.gov.py/portal/PARAGUAY-SET', timeout=10).text, "html.parser")
         compra = soup.find_all(
             'span', style="font-family:arial,helvetica,sans-serif;").pop(0).select('span')[0].contents[
                      0].string.replace('.', '')[2::]
