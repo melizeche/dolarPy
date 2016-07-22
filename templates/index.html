@@ -1,145 +1,191 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DolarPy</title>
- <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.green-deep_purple.min.css" /> 
-<script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
-<link href='https://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet' type='text/css'>
-<!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> -->
-<script src="/js/jquery.min.js"></script>
-<script src="/js/autoNumeric-min.js"></script>
+    <link rel="stylesheet"
+          href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.green-deep_purple.min.css"/>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Aldrich'
+          rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/autoNumeric-min.js"></script>
 
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-<!-- Square card -->
-<style>
-.aldrich {
-  font-family: 'Aldrich',"Roboto","Helvetica","Arial",sans-serif  
-}
-.dolarpy-card-square.mdl-card {
-  width: 320px;
-  height: 230px;
-}
-.dolarpy-card-square > .mdl-card__title {
-  color: #fff;
-  padding-bottom: 16px;
-  padding-top: 10px;
-  background:
-    /*url('/images/dog.png') */
-    #46B6AC;
-}
-.mdl-card__title-text.derecha {
-	margin-left: auto;
-	font-weight: bold;
-}
-.mdl-textfield__input.grande{
-	font-size: 40px;
-}
-</style>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Square card -->
+    <style>
+        .aldrich {
+        font-family: 'Aldrich',"Roboto","Helvetica","Arial",sans-serif
+        }
+        .dolarpy-card-square.mdl-card {
+        width: 320px;
+        height: 230px;
+        }
+        .dolarpy-card-square > .mdl-card__title {
+        color: #fff;
+        padding-bottom: 16px;
+        padding-top: 10px;
+        background:
+        /*url('/images/dog.png') */
+        #46B6AC;
+        }
+        .mdl-card__title-text.derecha {
+        margin-left: auto;
+        font-weight: bold;
+        }
+        .mdl-textfield__input.grande{
+        font-size: 40px;
+        }
+    </style>
 </head>
 <body style="background-color:#EFEFEF;">
 <h1 class="aldrich">💸 DolarPy 💸</h1>
 
 <div class="mdl-textfield mdl-js-textfield">
-	<input class="mdl-textfield__input grande" type="text" id="cuanto" data-a-sign="$ " data-a-dec="," data-a-sep="." placeholder="Ingresa el monto"><!-- ₲ -->
-	<div class="mdl-tooltip" for="cuanto">
-		<strong>Ingresa el monto en dolares para calcular</strong>
-	</div>
+    <input class="mdl-textfield__input grande" type="text"
+           id="cuanto"
+           data-a-sign="$ " data-a-dec="," data-a-sep="."
+           placeholder="Monto"><!-- ₲ -->
+    <div class="mdl-tooltip" for="cuanto">
+        <strong>Convertir dólares a guaraníes</strong>
+    </div>
 </div>
 
 
 <div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--3-col">
+    <div class="mdl-cell mdl-cell--3-col">
 
-	<div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Compra: 
-	    <div class="mdl-card__title-text derecha" id="cchaco"></div></p> 
-	  </div>
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Venta: 
-	    <div class="mdl-card__title-text derecha" id="vchaco"></div></p>
-	    </div>
-	  <div class="mdl-card__actions mdl-card--border">
-	    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-	      Cambios Chaco
-	    </a>
-	  </div>
-	</div>  	
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
 
-  </div>
+                <div class="mdl-card__title-text derecha" id="cchaco"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
 
-  <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-card__title-text derecha" id="vchaco"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Cambios Chaco
+                </a>
+            </div>
+        </div>
 
-	<div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Compra: 
-	    <div class="mdl-card__title-text derecha" id="calberdi"></div></p> 
-	  </div>
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Venta: 
-	    <div class="mdl-card__title-text derecha" id="valberdi"></div></p>
-	    </div>
-	  <div class="mdl-card__actions mdl-card--border">
-	    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-	      Cambios Alberdi
-	    </a>
-	  </div>
-	</div>  	
+    </div>
 
-  </div>
+    <div class="mdl-cell mdl-cell--3-col">
 
-  <div class="mdl-cell mdl-cell--3-col">
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
 
-	<div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Compra: 
-	    <div class="mdl-card__title-text derecha" id="cmaxi"></div></p> 
-	  </div>
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Venta: 
-	    <div class="mdl-card__title-text derecha" id="vmaxi"></div></p>
-	    </div>
-	  <div class="mdl-card__actions mdl-card--border">
-	    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-	      Maxicambios
-	    </a>
-	  </div>
-	</div>  	
+                <div class="mdl-card__title-text derecha" id="calberdi"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
 
-  </div>
+                <div class="mdl-card__title-text derecha" id="valberdi"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Cambios Alberdi
+                </a>
+            </div>
+        </div>
 
-<div class="mdl-cell mdl-cell--3-col">
+    </div>
 
-	<div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Compra: 
-	    <div class="mdl-card__title-text derecha" id="cbcp"></div></p> 
-	  </div>
-	  <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Venta: 
-	    <div class="mdl-card__title-text derecha" id="vbcp"></div></p>
-	    </div>
-	   <div class="mdl-card__title mdl-card--expand">
-	    <p class="mdl-card__title-text">Ref Día: 
-	    <div class="mdl-card__title-text derecha"><span id="refbcp"></span></div></p>
-	    </div>
-	  <div class="mdl-card__actions mdl-card--border">
-	    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-	      BCP
-	    </a>
-	  </div>
-	</div>  	
+    <div class="mdl-cell mdl-cell--3-col">
 
-  </div>
-    
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                <div class="mdl-card__title-text derecha" id="cmaxi"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                <div class="mdl-card__title-text derecha" id="vmaxi"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Maxicambios
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                <div class="mdl-card__title-text derecha" id="cbcp"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                <div class="mdl-card__title-text derecha" id="vbcp"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Ref Día:
+
+                <div class="mdl-card__title-text derecha"><span
+                        id="refbcp"></span></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    BCP
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                <div class="mdl-card__title-text derecha" id="cset"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                <div class="mdl-card__title-text derecha" id="vset"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    SET
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
-<p>Actualizado: <span id="updated"></span></p>
-<h4 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h4>
-<h4 id="algo">Twitter bot <a href="https://twitter.com/dolarpy">@DolarPy</a></h4>
-<h4 id="algo">Código en <a href="https://github.com/melizeche/dolarPy">Github</a></h4>
+<h5>Actualizado: <span id="updated"></span></h5>
+<h4 id="api">Webservice en <a href="/api/1.0/">/api/1.0/</a></h4>
 
 <script type="text/javascript">
 /*
@@ -154,13 +200,15 @@ var vmaxi;
 var cbcp;
 var vbcp;
 var refbcp;
+var cset;
+var vset;
 var updated;
 
 	function get_coti(){
 		$.get("/api/1.0/", 
 				function(json){
 					console.log(json);
-					
+
 					cchaco = json.dolarpy.cambioschaco.compra;
 					vchaco = json.dolarpy.cambioschaco.venta;
 					calberdi = json.dolarpy.cambiosalberdi.compra;
@@ -170,6 +218,8 @@ var updated;
 					cbcp = json.dolarpy.bcp.compra;
 					vbcp = json.dolarpy.bcp.venta;
 					refbcp = json.dolarpy.bcp.referencial_diario;
+					cset = json.dolarpy.set.compra;
+					vset = json.dolarpy.set.venta;
 
 					$("#cchaco").text(cchaco).autoNumeric('init');
 					$("#vchaco").text(vchaco).autoNumeric('init');
@@ -180,6 +230,8 @@ var updated;
 					$("#cbcp").text(cbcp).autoNumeric('init');
 					$("#vbcp").text(vbcp).autoNumeric('init');
 					$("#refbcp").text(refbcp).autoNumeric('init');
+					$("#cset").text(cset).autoNumeric('init');
+					$("#vset").text(vset).autoNumeric('init');
 					$("#cuanto").autoNumeric('init');
 					$("#updated").text(json.updated);
 				}
@@ -187,7 +239,6 @@ var updated;
 	}
 
 	$(document).ready(function () {
-		console.log("YA!");
 		$.extend($.fn.autoNumeric.defaults, {              
 						aSep: '.',              
 						aDec: ',',
@@ -224,9 +275,15 @@ var updated;
 			$("#calberdi").text(valor*calberdi).autoNumeric('init');
 			$("#valberdi").autoNumeric('destroy');
 			$("#valberdi").text(valor*valberdi).autoNumeric('init');
+			//
+			$("#cset").autoNumeric('destroy');
+			$("#cset").text(valor*cset).autoNumeric('init');
+			$("#vset").autoNumeric('destroy');
+			$("#vset").text(valor*vset).autoNumeric('init');
 						
 		});
 	});
+
 
 </script>
 <script>
@@ -237,7 +294,6 @@ var updated;
 
   ga('create', 'UA-68660646-1', 'auto');
   ga('send', 'pageview');
-
 </script>
 </body>
 </html>
