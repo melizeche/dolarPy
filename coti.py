@@ -16,10 +16,10 @@ def decimal_default(obj):
 
 def chaco():
     try:
-        soup = BeautifulSoup(
-            requests.get('http://www.cambioschaco.com.py/', timeout=10).text, "html.parser")
-        compra = soup.find_all(class_='purchase')[0].contents[0].replace('.','')
-        venta = soup.find_all(class_='sale')[0].contents[0].replace('.','')
+        soup = json.loads(
+            requests.get('http://www.cambioschaco.com.py/api/branch_office/1/exchange', timeout=10).text)
+        compra = soup['items'][0]['purchasePrice']
+        venta =  soup['items'][0]['salePrice']
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
