@@ -6,6 +6,7 @@ import requests
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
+from websocket import create_connection
 
 
 def decimal_default(obj):
@@ -46,10 +47,13 @@ def maxi():
 
 def alberdi():
     try:
-        soup = json.loads(
-            requests.get('http://www.cambiosalberdi.com/customscripts/ajax/getCotizaciones.php', timeout=10).text)
+        ws = create_connection("ws://cambiosalberdi.com:9300")
+        ws.send("Connected")
+        result = ws.recv()
+        soup = json.loads(result)
         compra =  soup['asuncion'][0]['compra'].replace('.','')
         venta = soup['asuncion'][0]['venta'].replace('.','')
+        ws.close()
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
