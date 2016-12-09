@@ -43,3 +43,16 @@ So for check/update the exchange rate every 10 minutes between 6am and 8pm on we
 And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ```0      8,12,18    * * 1-5 /apps/dolarPy/env/bin/python /apps/dolarPy/single_tweet_bot.py```
+
+## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+
+## License
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE.txt](LICENSE.txt) file for details
+
