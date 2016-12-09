@@ -110,12 +110,29 @@ def setgov():
     return Decimal(compra), Decimal(venta)
 
 
+def interfisa():
+    try:
+        soup = BeautifulSoup(
+            requests.get('https://www.interfisa.com.py', timeout=8).text, "html.parser")
+        compra = soup.find_all(
+            id="dolar_compra")[0].string.replace('.', '')
+        venta = soup.find_all(
+            id="dolar_venta")[0].string.replace('.', '')
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
 def create_json():
     mcompra, mventa = maxi()
     ccompra, cventa = chaco()
     acompra, aventa = alberdi()
     bcpcompra, bcpventa, bcpref = bcp()
     setcompra, setventa = setgov()
+    intcompra, intventa = interfisa()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -139,6 +156,10 @@ def create_json():
                 'compra': setcompra,
                 'venta': setventa
             },
+            'interfisa': {
+                'compra': intcompra,
+                'venta': intventa
+            }
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
