@@ -15,12 +15,16 @@ def decimal_default(obj):
     raise TypeError
 
 
+def format_decimal(number):
+    return str(number).replace('.', '').replace(',', '.')
+
+
 def chaco():
     try:
         soup = json.loads(
             requests.get('http://www.cambioschaco.com.py/api/branch_office/1/exchange', timeout=10).text)
         compra = soup['items'][0]['purchasePrice']
-        venta =  soup['items'][0]['salePrice']
+        venta = soup['items'][0]['salePrice']
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -51,8 +55,8 @@ def alberdi():
         ws.send("Connected")
         result = ws.recv()
         soup = json.loads(result)
-        compra =  soup['asuncion'][0]['compra'].replace('.','')
-        venta = soup['asuncion'][0]['venta'].replace('.','')
+        compra = soup['asuncion'][0]['compra'].replace('.', '')
+        venta = soup['asuncion'][0]['venta'].replace('.', '')
         ws.close()
     except requests.ConnectionError:
         compra, venta = 0, 0
@@ -89,22 +93,22 @@ def bcp():
 
     return Decimal(compra), Decimal(venta), Decimal(ref)
 
+
 def setgov():
     try:
         soup = BeautifulSoup(
             requests.get('http://www.set.gov.py/portal/PARAGUAY-SET', timeout=10).text, "html.parser")
-        compra = soup.find_all(
-            'span', style="font-family:arial,helvetica,sans-serif;").pop(0).select('span')[0].contents[
-                     0].string.replace('.', '')[2::]
-        venta = soup.find_all(
-            'span', style="font-family:arial,helvetica,sans-serif;").pop(1).select('span')[0].contents[
-                    0].string.replace('.', '')[2::]
+        compra = soup.find_all(class_="UITipoGrafiaCotizacion")[0].select('div')[
+            1].contents[4].replace('.', '').replace(',', '.')
+        venta = soup.find_all(class_="UITipoGrafiaCotizacion")[0].select('div')[
+            2].contents[4].replace('.', '').replace(',', '.')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
+
 
 def create_json():
     mcompra, mventa = maxi()
