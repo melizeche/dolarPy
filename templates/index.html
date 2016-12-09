@@ -183,6 +183,31 @@
 
     </div>
 
+
+    <div class="mdl-cell mdl-cell--3-col">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                <div class="mdl-card__title-text derecha" id="intcompra"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                <div class="mdl-card__title-text derecha" id="intventa"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Interfisa
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -204,6 +229,8 @@ var vbcp;
 var refbcp;
 var cset;
 var vset;
+var intcompra;
+var intventa;
 var updated;
 
 	function get_coti(){
@@ -222,6 +249,8 @@ var updated;
 					refbcp = json.dolarpy.bcp.referencial_diario;
 					cset = json.dolarpy.set.compra;
 					vset = json.dolarpy.set.venta;
+          intcompra = json.dolarpy.interfisa.compra;
+          intventa  = json.dolarpy.interfisa.venta;
 
 					$("#cchaco").text(cchaco).autoNumeric('init');
 					$("#vchaco").text(vchaco).autoNumeric('init');
@@ -234,6 +263,8 @@ var updated;
 					$("#refbcp").text(refbcp).autoNumeric('init');
 					$("#cset").text(cset).autoNumeric('init');
 					$("#vset").text(vset).autoNumeric('init');
+          $("#intcompra").text(intcompra).autoNumeric('init');
+          $("#intventa").text(intventa).autoNumeric('init');
 					$("#cuanto").autoNumeric('init');
 					$("#updated").text(json.updated);
 				}
@@ -282,7 +313,11 @@ var updated;
 			$("#cset").text(valor*cset).autoNumeric('init');
 			$("#vset").autoNumeric('destroy');
 			$("#vset").text(valor*vset).autoNumeric('init');
-						
+      //
+      $("#intcompra").autoNumeric('destroy');
+      $("#intcompra").text(valor*intcompra).autoNumeric('init');
+      $("#intventa").autoNumeric('destroy');
+      $("#intventa").text(valor*intventa).autoNumeric('init');
 		});
 	});
 
