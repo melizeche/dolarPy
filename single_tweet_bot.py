@@ -20,8 +20,8 @@ response =  updated + "\n\n" \
             "\nAlberdi:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.').replace('.0','') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.').replace('.0','') + \
-            "\nMaxicambios:\n"\
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') 
+            "\nBCP:\n"\
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['bcp']['compra']).replace(',','.').replace('.0','') + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['bcp']['venta']).replace(',','.').replace('.0','') 
 
 api.update_status(status=response)
