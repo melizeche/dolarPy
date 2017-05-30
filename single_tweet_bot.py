@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
+
 import tweepy, time, sys, json
 from datetime import datetime
 from coti import create_json, write_output, get_output
@@ -9,7 +9,7 @@ from config import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_KEY, ACCESS_SECRET
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
- 
+
 dolarjson = json.loads(get_output())
 updated = datetime.strptime(dolarjson['updated'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m %H:%M')
 
@@ -20,8 +20,8 @@ response =  updated + "\n\n" \
             "\nAlberdi:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.').replace('.0','') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.').replace('.0','') + \
-            "\nMaxicambios:\n"\
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') 
+            "\nBCP:\n"\
+            "Compra: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['compra']))).replace(',','.') + \
+            " | Venta: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['venta']))).replace(',','.')
 
 api.update_status(status=response)
