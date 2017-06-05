@@ -36,11 +36,9 @@ def chaco():
 def maxi():
     try:
         soup = BeautifulSoup(
-            requests.get('http://www.maxicambios.com.py/', timeout=10).text, "html.parser")
-        compra = soup.find_all(class_='lineas1')[0].contents[
-            7].string.replace('.', '')
-        venta = soup.find_all(class_='lineas1')[0].contents[
-            5].string.replace('.', '')
+            requests.get('http://cotizext.maxicambios.com.py/index.html', timeout=10).text, "html.parser")
+        compra = soup.find_all(id="sp_EF_pc_0")[0].contents[0]
+        venta = soup.find_all(id="sp_EF_pv_0")[0].contents[0]
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
