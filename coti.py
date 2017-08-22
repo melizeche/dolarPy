@@ -34,11 +34,12 @@ def chaco():
 
 
 def maxi():
+    today = datetime.today().strftime('%d%m%Y')
+    url = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/Cotizaciones?fecha=%s" % (today)
     try:
-        soup = BeautifulSoup(
-            requests.get('http://cotizext.maxicambios.com.py/index.html', timeout=10).text, "html.parser")
-        compra = soup.find_all(id="sp_EF_pc_0")[0].contents[0]
-        venta = soup.find_all(id="sp_EF_pv_0")[0].contents[0]
+        soup = requests.get(url, timeout=10).json()
+        compra = soup[0]['Compra']
+        venta = soup[0]['Venta']
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
