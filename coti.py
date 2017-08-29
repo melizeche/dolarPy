@@ -124,6 +124,18 @@ def interfisa():
 
     return Decimal(compra), Decimal(venta)
 
+def amambay():
+    try:
+        soup = requests.get("http://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange", timeout=10).json()
+        compra = soup['currencyExchanges'][0]['purchasePrice']
+        venta = soup['currencyExchanges'][0]['salePrice']
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
 
 def create_json():
     mcompra, mventa = maxi()
@@ -132,6 +144,7 @@ def create_json():
     bcpcompra, bcpventa, bcpref = bcp()
     setcompra, setventa = setgov()
     intcompra, intventa = interfisa()
+    ambcompra, ambventa = amambay()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -158,10 +171,15 @@ def create_json():
             'interfisa': {
                 'compra': intcompra,
                 'venta': intventa
+            },
+            'amambay': {
+                'compra': ambcompra,
+                'venta': ambventa
             }
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
+
     return json.dumps(respjson, indent=4, sort_keys=True, separators=(',', ': '), default=decimal_default)
 
 
