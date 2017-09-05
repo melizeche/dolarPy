@@ -59,9 +59,9 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ## Author
 
-Marcelo Elizeche Landó [(@melizeche)]([https://github.com/melizeche)
+* Marcelo Elizeche Landó https://github.com/melizeche
 
-## Contributors
+## Contributors / Thanks
 
 * Diego Díaz https://github.com/berithpy
 * Diego Zacarías https://github.com/zv3
