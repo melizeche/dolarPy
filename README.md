@@ -13,6 +13,7 @@ https://twitter.com/DolarPy
 
 #### API wrappers
 
+* For Java https://github.com/melizeche/dolarpy-wrapper-java
 * For Python https://github.com/melizeche/dolarpy-wrapper-python
 
 ## Documentation in progress
