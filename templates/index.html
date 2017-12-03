@@ -232,6 +232,31 @@
 
     </div>
 
+
+    <div class="mdl-cell mdl-cell--3-col">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                <div class="mdl-card__title-text derecha" id="mydcompra"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                <div class="mdl-card__title-text derecha" id="mydventa"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    MyD Cambios
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -257,10 +282,12 @@ var intcompra;
 var intventa;
 var ambcompra;
 var ambventa;
+var mydcompra;
+var mydventa;
 var updated;
 
 	function get_coti(){
-		$.get("/api/1.0/", 
+		$.get("/api/1.0/",
 				function(json){
 					console.log(json);
 
@@ -279,6 +306,8 @@ var updated;
                     intventa  = json.dolarpy.interfisa.venta;
                     ambcompra = json.dolarpy.amambay.compra;
                     ambventa = json.dolarpy.amambay.venta;
+                    mydcompra = json.dolarpy.mydcambios.compra;
+                    mydventa = json.dolarpy.mydcambios.venta;
 
 
 					$("#cchaco").text(cchaco).autoNumeric('init');
@@ -296,6 +325,8 @@ var updated;
                     $("#intventa").text(intventa).autoNumeric('init');
                     $("#ambcompra").text(ambcompra).autoNumeric('init');
                     $("#ambventa").text(ambventa).autoNumeric('init');
+                    $("#mydcompra").text(mydcompra).autoNumeric('init');
+                    $("#mydventa").text(mydventa).autoNumeric('init');
 					$("#cuanto").autoNumeric('init');
 					$("#updated").text(json.updated);
 				}
@@ -303,8 +334,8 @@ var updated;
 	}
 
 	$(document).ready(function () {
-		$.extend($.fn.autoNumeric.defaults, {              
-						aSep: '.',              
+		$.extend($.fn.autoNumeric.defaults, {
+						aSep: '.',
 						aDec: ',',
 						aPad: 'false',
 						aSign: '₲ ',
@@ -315,7 +346,7 @@ var updated;
 			var valor;
 			var calc;
 
-			
+
 			valor = $("#cuanto").autoNumeric('get') //val()
 			valor = (valor==0 ? 1 : valor);
 			console.log(valor*refbcp);
@@ -354,6 +385,11 @@ var updated;
             $("#ambcompra").text(valor*ambcompra).autoNumeric('init');
             $("#ambventa").autoNumeric('destroy');
             $("#ambventa").text(valor*ambventa).autoNumeric('init');
+            //
+            $("#mydcompra").autoNumeric('destroy');
+            $("#mydcompra").text(valor*mydcompra).autoNumeric('init');
+            $("#mydventa").autoNumeric('destroy');
+            $("#mydventa").text(valor*mydventa).autoNumeric('init');
 		});
 	});
 
