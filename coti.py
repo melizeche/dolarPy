@@ -35,7 +35,8 @@ def chaco():
 
 def maxi():
     today = datetime.today().strftime('%d%m%Y')
-    url = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/Cotizaciones?fecha=%s" % (today)
+    url = "http://www.maxicambios.com.py/Umbraco/api/Pizarra/Cotizaciones?fecha=%s" % (
+        today)
     try:
         soup = requests.get(url, timeout=10).json()
         compra = soup[0]['Compra']
@@ -124,11 +125,29 @@ def interfisa():
 
     return Decimal(compra), Decimal(venta)
 
+
 def amambay():
     try:
-        soup = requests.get("http://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange", timeout=10).json()
+        soup = requests.get(
+            "http://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange", timeout=10).json()
         compra = soup['currencyExchanges'][0]['purchasePrice']
         venta = soup['currencyExchanges'][0]['salePrice']
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
+def myd():
+    try:
+        soup = BeautifulSoup(
+            requests.get('https://www.mydcambios.com.py/', timeout=10).text, "html.parser")
+        compra = soup.select('#cotizaciones > div > table > tbody')[
+            0].findAll('td')[1].text.replace(',', '')
+        venta = soup.select('#cotizaciones > div > table > tbody')[
+            0].findAll('td')[2].text.replace(',', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -145,6 +164,7 @@ def create_json():
     setcompra, setventa = setgov()
     intcompra, intventa = interfisa()
     ambcompra, ambventa = amambay()
+    mydcompra, mydventa = myd()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -175,6 +195,10 @@ def create_json():
             'amambay': {
                 'compra': ambcompra,
                 'venta': ambventa
+            },
+            'mydcambios': {
+                'compra': mydcompra,
+                'venta': mydventa
             }
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -193,5 +217,6 @@ def write_output():
     response = create_json()
     with open('dolar.json', 'w') as f:
         f.write(response)
+
 
 write_output()
