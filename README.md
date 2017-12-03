@@ -20,7 +20,7 @@ https://twitter.com/DolarPy
 
 ## Requirements
 
-* Python 2.7+
+* Python 2.7+ or 3.5+
 * BeautifulSoup4
 * Flask
 * Tweepy
