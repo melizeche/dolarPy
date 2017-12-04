@@ -36,6 +36,20 @@ pip install -r requirements.txt
 crontab -e (add coti.py) // See example below
 python cotiapp.py
 ```
+### On macOS High Sierra with python3
+
+```
+# pip3 is installed with Python3
+pip3 install virtualenv
+# creating the virtualenv
+virtualenv -p python3 env
+# activate the virtualenv:
+source env/bin/activate
+pip3 install -r requirements.txt
+# and the run
+# if you need to deactivate the virtualenv:
+deactivate
+```
 
 ### Crontab format and example
 
