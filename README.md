@@ -40,7 +40,7 @@ pip install -r requirements.txt
 crontab -e (add coti.py) // See example below
 python cotiapp.py
 ```
-### On macOS High Sierra with python3
+### On macOS High Sierra with python3 (also most linux distros)
 
 ```
 # pip3 is installed with Python3
@@ -75,7 +75,6 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-
 ## Author
 
 * Marcelo Elizeche Landó https://github.com/melizeche
@@ -83,9 +82,17 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 ## Contributors / Thanks
 
 * Alejo Carballude https://github.com/AlejoAsd
+* Carlos Carvallo https://github.com/carloscarvallo
 * Diego Díaz https://github.com/berithpy
 * Diego Zacarías https://github.com/zv3
 * Ivan Koop https://github.com/ivankoop
+
+## TODO(APIv2)
+
+* ~Better~ Documentation
+* Add more currencies
+* Databases support
+* Historical data API endpoint
 
 ## License
 
