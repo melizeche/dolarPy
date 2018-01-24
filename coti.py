@@ -70,7 +70,7 @@ def bcp():
     try:
         soup = BeautifulSoup(
             requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/monedas', timeout=10,
-                         headers={'user-agent': 'Mozilla/5.0'}).text, "html.parser")
+                         headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
         ref = soup.select(
             '#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)')[0].get_text()
         ref = ref.replace('.', '').replace(',', '.')
