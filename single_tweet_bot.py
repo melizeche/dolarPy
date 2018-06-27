@@ -18,18 +18,19 @@ response =  updated + "\n\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['venta']).replace(',','.').replace('.0','') + \
             "\nAlberdi:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.').replace('.0','') +\
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.').replace('.0','') + \
-            "\nBCP:\n"\
-            "Compra: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['compra']))).replace(',','.') + \
-            " | Venta: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['venta']))).replace(',','.') + \
-            "\nSET:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['set']['compra']).replace(',','.') +\
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['set']['venta']).replace(',','.') + \
             "\nMyD Cambios:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.').replace('.0','') +\
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.').replace('.0','') + \
             "\nMaxicambios:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') +\
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','')
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
+            "\n\nBCP:\n"\
+            "Compra: " + "{:,}".format(float(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
+            " | Venta: " + "{:,}".format(float(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.') + \
+            "\nSET:\n" \
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['set']['compra']).replace(',','.') +\
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['set']['venta']).replace(',','.')
+
 api.update_status(status=response)
