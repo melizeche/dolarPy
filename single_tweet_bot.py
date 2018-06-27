@@ -14,22 +14,22 @@ dolarjson = json.loads(get_output())
 updated = datetime.strptime(dolarjson['updated'], '%Y-%m-%d %H:%M:%S').strftime('📅 %d/%m ⏳ %H:%M')
 
 response =  updated + "\n\n" \
-            "Cambios Chaco:\n"\
+            "💱\n■Cambios Chaco:\n"\
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['venta']).replace(',','.').replace('.0','') + \
-            "\nAlberdi:\n" \
+            "\n■Alberdi:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.').replace('.0','') + \
-            "\nMyD Cambios:\n" \
+            "\n■MyD Cambios:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.').replace('.0','') + \
-            "\nMaxicambios:\n" \
+            "\n■Maxicambios:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
-            "\n\nBCP:\n"\
+            "\n\n🏛\n■BCP:\n"\
             "Compra: " + "{:,}".format(float(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
             " | Venta: " + "{:,}".format(float(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.') + \
-            "\nSET:\n" \
+            "\n■SET:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['set']['compra']).replace(',','.') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['set']['venta']).replace(',','.')
 
