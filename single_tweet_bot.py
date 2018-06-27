@@ -11,7 +11,7 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 dolarjson = json.loads(get_output())
-updated = datetime.strptime(dolarjson['updated'], '📅 %Y-%m-%d ⏳ %H:%M:%S').strftime('%d/%m %H:%M')
+updated = datetime.strptime(dolarjson['updated'], '%Y-%m-%d %H:%M:%S').strftime('📅 %d/%m ⏳ %H:%M')
 
 response =  updated + "\n\n" \
             "Cambios Chaco:\n"\
