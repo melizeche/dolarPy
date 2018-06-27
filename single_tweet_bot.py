@@ -30,7 +30,7 @@ response =  updated + "\n\n" \
             "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
             " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.') + \
             "\n■SET:\n" \
-            "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') +\
-            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.')
+            "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['set']['compra'])).replace(',','.') +\
+            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['set']['venta'])).replace(',','.')
 
 api.update_status(status=response)
