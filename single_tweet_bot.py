@@ -22,14 +22,14 @@ response =  updated + "\n\n" \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.').replace('.0','') + \
             "\nBCP:\n"\
             "Compra: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['compra']))).replace(',','.') + \
-            " | Venta: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['venta']))).replace(',','.')
+            " | Venta: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['venta']))).replace(',','.') + \
             "\nSET:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['set']['compra']).replace(',','.') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['set']['venta']).replace(',','.') + \
-            "\MyD Cambios:\n" \
+            "\nMyD Cambios:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.').replace('.0','') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.').replace('.0','') + \
-            "\Maxicambios:\n" \
+            "\nMaxicambios:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
             
