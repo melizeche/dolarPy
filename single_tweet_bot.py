@@ -11,7 +11,7 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 dolarjson = json.loads(get_output())
-updated = datetime.strptime(dolarjson['updated'], '%Y-%m-%d %H:%M:%S').strftime('📅 %d/%m ⏳ %H:%M')
+updated = datetime.strptime(dolarjson['updated'], '%Y-%m-%d %H:%M:%S').strftime('📅%d/%m ⏳%H:%M')
 
 response =  updated + "\n\n" \
             "💱\n■Cambios Chaco:\n"\
@@ -27,10 +27,10 @@ response =  updated + "\n\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
             "\n\n🏛\n■BCP:\n"\
-            "Compra: " + "{:,}".format(float(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
-            " | Venta: " + "{:,}".format(float(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.') + \
+            "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
+            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
             "\n■SET:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['set']['compra']).replace(',','.') +\
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['set']['venta']).replace(',','.')
+            "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') +\
+            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.')
 
 api.update_status(status=response)
