@@ -23,7 +23,7 @@ response =  updated + "\n\n" \
             "\nBCP:\n"\
             "Compra: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['compra']))).replace(',','.') + \
             " | Venta: " + "{:,}".format(int(float(dolarjson['dolarpy']['bcp']['venta']))).replace(',','.')
-            "\SET:\n" \
+            "\nSET:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['set']['compra']).replace(',','.') +\
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['set']['venta']).replace(',','.') + \
             "\MyD Cambios:\n" \
