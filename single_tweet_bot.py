@@ -31,8 +31,5 @@ response =  updated + "\n\n" \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.').replace('.0','') + \
             "\nMaxicambios:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') +\
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
-            
-            
-
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','')
 api.update_status(status=response)
