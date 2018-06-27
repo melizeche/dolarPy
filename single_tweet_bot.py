@@ -28,9 +28,9 @@ response =  updated + "\n\n" \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
             "\n\n🏛\n■BCP:\n"\
             "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
-            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
+            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.') + \
             "\n■SET:\n" \
             "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') +\
-            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.')
+            " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.')
 
 api.update_status(status=response)
