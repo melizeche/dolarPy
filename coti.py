@@ -8,6 +8,9 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from websocket import create_connection
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):

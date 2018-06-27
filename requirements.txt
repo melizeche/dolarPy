@@ -4,3 +4,4 @@ tweepy==3.5.0
 gunicorn==19.7.1
 flask-cors==3.0.3
 websocket-client==0.44.0
+requests==2.19.1
