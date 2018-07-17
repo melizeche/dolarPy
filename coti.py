@@ -147,10 +147,10 @@ def myd():
     try:
         soup = BeautifulSoup(
             requests.get('https://www.mydcambios.com.py/', timeout=10).text, "html.parser")
-        compra = soup.select('#cotizaciones > div > table > tbody')[
-            0].findAll('td')[1].text.replace(',', '')
-        venta = soup.select('#cotizaciones > div > table > tbody')[
-            0].findAll('td')[2].text.replace(',', '')
+        compra = soup.select(
+            'div.cambios-banner-text.scrollbox > ul:nth-of-type(2) > li:nth-of-type(2) ')[0].text
+        venta = soup.select(
+            'div.cambios-banner-text.scrollbox > ul:nth-of-type(2) > li:nth-of-type(3) ')[0].text
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
