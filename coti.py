@@ -2,13 +2,13 @@
 # -*- encoding: utf-8 -*-
 import json
 import requests
+import urllib3
 
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
 from websocket import create_connection
 
-import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -25,7 +25,8 @@ def format_decimal(number):
 def chaco():
     try:
         soup = json.loads(
-            requests.get('http://www.cambioschaco.com.py/api/branch_office/1/exchange', timeout=10).text)
+            requests.get(
+                'http://www.cambioschaco.com.py/api/branch_office/1/exchange', timeout=10).text)
         compra = soup['items'][0]['purchasePrice']
         venta = soup['items'][0]['salePrice']
     except requests.ConnectionError:
@@ -78,8 +79,9 @@ def bcp():
             '#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)')[0].get_text()
         ref = ref.replace('.', '').replace(',', '.')
         soup = BeautifulSoup(
-            requests.get('https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante', timeout=10,
-                         headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
+            requests.get(
+                'https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante', timeout=10,
+                headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
         compra_array = soup.find(
             class_="table table-striped table-bordered table-condensed").select('tr > td:nth-of-type(4)')
         venta_array = soup.find(
@@ -207,7 +209,8 @@ def create_json():
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
 
-    return json.dumps(respjson, indent=4, sort_keys=True, separators=(',', ': '), default=decimal_default)
+    return json.dumps(
+        respjson, indent=4, sort_keys=True, separators=(',', ': '), default=decimal_default)
 
 
 def get_output():
