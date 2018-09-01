@@ -7,7 +7,6 @@ import urllib3
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
-from websocket import create_connection
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -55,13 +54,10 @@ def maxi():
 
 def alberdi():
     try:
-        ws = create_connection("ws://cambiosalberdi.com:9300")
-        ws.send("Connected")
-        result = ws.recv()
-        soup = json.loads(result)
+        url = "http://cambiosalberdi.com/ws/getCotizaciones.json"
+        soup = requests.get(url, timeout=10).json()
         compra = soup['asuncion'][0]['compra'].replace('.', '')
         venta = soup['asuncion'][0]['venta'].replace('.', '')
-        ws.close()
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
