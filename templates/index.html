@@ -336,6 +336,30 @@
 
     </div>
 
+    <div class="margin-bottom">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                    <div class="mdl-card__title-text derecha" id="cvision"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                    <div class="mdl-card__title-text derecha" id="vvision"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Visión Banco
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -370,6 +394,8 @@ var eccompra;
 var ecventa;
 var wcompra;
 var wventa;
+var cvision;
+var vvision;
 
 	function get_coti(){
 		$.get("/api/1.0/",
@@ -399,6 +425,9 @@ var wventa;
                     ecventa = json.dolarpy.eurocambios.venta;
                     wcompra = json.dolarpy.mundialcambios.compra;
                     wventa = json.dolarpy.mundialcambios.venta;
+                    cvision = json.dolarpy.vision.compra;
+                    vvision = json.dolarpy.vision.venta;
+
 
 					$("#cchaco").text(cchaco).autoNumeric('init');
 					$("#vchaco").text(vchaco).autoNumeric('init');
@@ -423,6 +452,8 @@ var wventa;
                     $("#ecventa").text(ecventa).autoNumeric('init');
                     $("#wcompra").text(wcompra).autoNumeric('init');
                     $("#wventa").text(wventa).autoNumeric('init');
+                    $("#cvision").text(cvision).autoNumeric('init');
+                    $("#vvision").text(vvision).autoNumeric('init');
 					$("#cuanto").autoNumeric('init');
 					$("#updated").text(json.updated);
 				}
@@ -502,6 +533,11 @@ var wventa;
             $("#wcompra").text(valor*wcompra).autoNumeric('init');
             $("#wventa").autoNumeric('destroy');
             $("#wventa").text(valor*wventa).autoNumeric('init');
+            //
+            $("#cvision").autoNumeric('destroy');
+            $("#cvision").text(valor*cvision).autoNumeric('init');
+            $("#vvision").autoNumeric('destroy');
+            $("#vvision").text(valor*vvision).autoNumeric('init');
 		});
 	});
 
