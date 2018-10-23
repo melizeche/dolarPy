@@ -113,12 +113,13 @@ def setgov():
 
 def interfisa():
     try:
-        soup = BeautifulSoup(
-            requests.get('https://www.interfisa.com.py', timeout=8).text, "html.parser")
-        compra = soup.find_all(
-            id="dolar_compra")[0].string.replace('.', '')
-        venta = soup.find_all(
-            id="dolar_venta")[0].string.replace('.', '')
+        soup = json.loads(
+            requests.get(
+                'https://seguro.interfisa.com.py/rest/cotizaciones', timeout=10).text)
+        arr = soup['operacionResponse']['cotizaciones']['monedaCot']
+        data = filter(lambda moneda: moneda['idMoneda'] == 1, arr)[0]
+        compra = data['compra']
+        venta = data['venta']
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
