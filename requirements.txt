@@ -1,7 +1,6 @@
 beautifulsoup4==4.6.0
-flask==0.12.2
+flask>=0.12.3
 tweepy==3.5.0
 gunicorn==19.7.1
 flask-cors==3.0.3
-websocket-client==0.44.0
-requests==2.19.1
+requests>=2.20.0
