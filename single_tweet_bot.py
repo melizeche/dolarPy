@@ -15,17 +15,17 @@ updated = datetime.strptime(dolarjson['updated'], '%Y-%m-%d %H:%M:%S').strftime(
 
 response =  updated + "\n\n" \
             "💱\n■ Cambios Chaco:\n"\
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['compra']).replace(',','.').replace('.0','') + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['venta']).replace(',','.').replace('.0','') + \
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['compra']).replace(',','.')[:-2] + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['venta']).replace(',','.')[:-2] + \
             "\n■ Alberdi:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.').replace('.0','') + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.').replace('.0','') + \
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.')[:-2] + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.')[:-2] + \
             "\n■ MyD Cambios:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.').replace('.0','') + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.').replace('.0','') + \
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.')[:-2] + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.')[:-2] + \
             "\n■ Maxicambios:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.').replace('.0','') + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.').replace('.0','') + \
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['compra']).replace(',','.')[:-2] + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['maxicambios']['venta']).replace(',','.')[:-2] + \
             "\n\n🏛\n■ BCP:\n"\
             "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['compra'])).replace(',','.') + \
             " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['bcp']['venta'])).replace(',','.') + \
