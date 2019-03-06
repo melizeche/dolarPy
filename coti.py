@@ -160,20 +160,20 @@ def myd():
     return Decimal(compra), Decimal(venta)
 
 
-def familiar():
-    try:
-        soup = BeautifulSoup(
-            requests.get('https://www.familiar.com.py/', timeout=10).text, "html.parser")
-        compra = soup.select(
-            'hgroup:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(2)')[0].get_text().replace('.', '')
-        venta = soup.select(
-            'hgroup:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(2)')[0].get_text().replace('.', '')
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+# def familiar():  # Comentado porque el servidor bloquea las peticiones
+#     try:
+#         soup = BeautifulSoup(
+#             requests.get('https://www.familiar.com.py/', timeout=10).text, "html.parser")
+#         compra = soup.select(
+#             'hgroup:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(2)')[0].get_text().replace('.', '')
+#         venta = soup.select(
+#             'hgroup:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(2)')[0].get_text().replace('.', '')
+#     except requests.ConnectionError:
+#         compra, venta = 0, 0
+#     except:
+#         compra, venta = 0, 0
 
-    return Decimal(compra), Decimal(venta)
+#     return Decimal(compra), Decimal(venta)
 
 
 def create_json():
@@ -185,7 +185,7 @@ def create_json():
     intcompra, intventa = interfisa()
     ambcompra, ambventa = amambay()
     mydcompra, mydventa = myd()
-    famicompra, famiventa = familiar()
+    #famicompra, famiventa = familiar()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -221,10 +221,10 @@ def create_json():
                 'compra': mydcompra,
                 'venta': mydventa
             },
-            'familiar': {
-                'compra': famicompra,
-                'venta': famiventa
-            }
+            # 'familiar': {
+            #     'compra': famicompra,
+            #     'venta': famiventa
+            # }
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
