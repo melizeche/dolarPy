@@ -113,13 +113,15 @@ def setgov():
 
 def interfisa():
     try:
-        jsonResult = requests.get("https://seguro.interfisa.com.py/rest/cotizaciones", timeout=10).json()
-        cotizaciones = jsonResult['operacionResponse']['cotizaciones']['monedaCot']
+        jsonResult = requests.get(
+            "https://seguro.interfisa.com.py/rest/cotizaciones", timeout=10).json()
+        cotizaciones = jsonResult['operacionResponse'][
+            'cotizaciones']['monedaCot']
         for coti in cotizaciones:
             for k, v in coti.items():
-                if v == "DOLARES AMERICANOS":   #estamos en el dict de Dolares
+                if v == "DOLARES AMERICANOS":  # estamos en el dict de Dolares
                     compra = coti['compra']
-                    venta = coti['venta']        
+                    venta = coti['venta']
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -158,6 +160,22 @@ def myd():
     return Decimal(compra), Decimal(venta)
 
 
+def familiar():
+    try:
+        soup = BeautifulSoup(
+            requests.get('https://www.familiar.com.py/', timeout=10).text, "html.parser")
+        compra = soup.select(
+            'hgroup:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(2)')[0].get_text().replace('.', '')
+        venta = soup.select(
+            'hgroup:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(2)')[0].get_text().replace('.', '')
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
 def create_json():
     mcompra, mventa = maxi()
     ccompra, cventa = chaco()
@@ -167,6 +185,7 @@ def create_json():
     intcompra, intventa = interfisa()
     ambcompra, ambventa = amambay()
     mydcompra, mydventa = myd()
+    famicompra, famiventa = familiar()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -201,6 +220,10 @@ def create_json():
             'mydcambios': {
                 'compra': mydcompra,
                 'venta': mydventa
+            },
+            'familiar': {
+                'compra': famicompra,
+                'venta': famiventa
             }
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
