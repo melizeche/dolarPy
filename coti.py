@@ -175,6 +175,19 @@ def myd():
 
 #     return Decimal(compra), Decimal(venta)
 
+def bbva():
+    try:
+        soup = requests.get(
+            "https://www.bbva.com.py/Yaguarete/public/quotations", timeout=10).json()
+        compra = soup[0]['cashBuyPrice']
+        venta = soup[0]['cashSellPrice']
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
 
 def create_json():
     mcompra, mventa = maxi()
@@ -186,6 +199,7 @@ def create_json():
     ambcompra, ambventa = amambay()
     mydcompra, mydventa = myd()
     #famicompra, famiventa = familiar()
+    bbvacompra, bbvaventa = bbva()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -225,6 +239,10 @@ def create_json():
             #     'compra': famicompra,
             #     'venta': famiventa
             # }
+            'bbva': {
+                'compra': bbvacompra,
+                'venta': bbvaventa
+            },
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
