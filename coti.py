@@ -99,10 +99,8 @@ def setgov():
     try:
         soup = BeautifulSoup(
             requests.get('http://www.set.gov.py/portal/PARAGUAY-SET', timeout=10).text, "html.parser")
-        compra = soup.find_all(class_="UITipoGrafiaCotizacion")[0].select('div')[
-            1].contents[4].replace('.', '').replace(',', '.')
-        venta = soup.find_all(class_="UITipoGrafiaCotizacion")[0].select('div')[
-            2].contents[4].replace('.', '').replace(',', '.')
+        compra = soup.select('td.UICotizacion')[0].text.replace('G. ', '').replace('.','')
+        venta = soup.select('td.UICotizacion')[1].text.replace('G. ', '').replace('.','')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
