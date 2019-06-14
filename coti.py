@@ -144,6 +144,21 @@ def amambay():
     return Decimal(compra), Decimal(venta)
 
 
+def eurocambio():
+    try:
+        url = "https://eurocambios.com.py/v2/sgi/utilsDto.php"
+        data = {'param': 'getCotizacionesbySucursal', 'sucursal': '1'}
+        result = requests.post(url, data, timeout=10).json()
+        compra = result[0]['compra']
+        venta = result[0]['venta']
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
 def myd():
     try:
         soup = BeautifulSoup(
@@ -184,8 +199,9 @@ def create_json():
     setcompra, setventa = setgov()
     intcompra, intventa = interfisa()
     ambcompra, ambventa = amambay()
+    eccompra, ecventa = eurocambio()
     mydcompra, mydventa = myd()
-    #famicompra, famiventa = familiar()
+    # famicompra, famiventa = familiar()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -221,6 +237,10 @@ def create_json():
                 'compra': mydcompra,
                 'venta': mydventa
             },
+            'eurocambios' : {
+                'compra' : eccompra,
+                'venta' : ecventa
+            }
             # 'familiar': {
             #     'compra': famicompra,
             #     'venta': famiventa
