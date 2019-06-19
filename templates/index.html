@@ -257,6 +257,30 @@
 
     </div>
 
+        <div class="mdl-cell mdl-cell--3-col">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                <div class="mdl-card__title-text derecha" id="bbvacompra"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                <div class="mdl-card__title-text derecha" id="bbvaventa"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    BBVA
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -284,6 +308,8 @@ var ambcompra;
 var ambventa;
 var mydcompra;
 var mydventa;
+var bbvacompra;
+var bbvaventa;
 var updated;
 
 	function get_coti(){
@@ -308,6 +334,9 @@ var updated;
                     ambventa = json.dolarpy.amambay.venta;
                     mydcompra = json.dolarpy.mydcambios.compra;
                     mydventa = json.dolarpy.mydcambios.venta;
+                    bbvacompra = json.dolarpy.bbva.compra;
+                    bbvaventa = json.dolarpy.bbva.venta;
+
 
 
 					$("#cchaco").text(cchaco).autoNumeric('init');
@@ -327,6 +356,8 @@ var updated;
                     $("#ambventa").text(ambventa).autoNumeric('init');
                     $("#mydcompra").text(mydcompra).autoNumeric('init');
                     $("#mydventa").text(mydventa).autoNumeric('init');
+                    $("#bbvacompra").text(bbvacompra).autoNumeric('init');
+                    $("#bbvaventa").text(bbvaventa).autoNumeric('init');
 					$("#cuanto").autoNumeric('init');
 					$("#updated").text(json.updated);
 				}
@@ -390,6 +421,12 @@ var updated;
             $("#mydcompra").text(valor*mydcompra).autoNumeric('init');
             $("#mydventa").autoNumeric('destroy');
             $("#mydventa").text(valor*mydventa).autoNumeric('init');
+            //
+            $("#bbvacompra").autoNumeric('destroy');
+            $("#bbvacompra").text(valor*bbvacompra).autoNumeric('init');
+            $("#bbvaventa").autoNumeric('destroy');
+            $("#bbvaventa").text(valor*bbvaventa).autoNumeric('init');
+
 		});
 	});
 
