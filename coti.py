@@ -99,8 +99,10 @@ def setgov():
     try:
         soup = BeautifulSoup(
             requests.get('http://www.set.gov.py/portal/PARAGUAY-SET', timeout=10).text, "html.parser")
-        compra = soup.select('td.UICotizacion')[0].text.replace('G. ', '').replace('.','')
-        venta = soup.select('td.UICotizacion')[1].text.replace('G. ', '').replace('.','')
+        compra = soup.select('td.UICotizacion')[
+            0].text.replace('G. ', '').replace('.', '')
+        venta = soup.select('td.UICotizacion')[
+            1].text.replace('G. ', '').replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -134,6 +136,21 @@ def amambay():
             "http://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange", timeout=10).json()
         compra = soup['currencyExchanges'][0]['purchasePrice']
         venta = soup['currencyExchanges'][0]['salePrice']
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
+def eurocambio():
+    try:
+        url = "https://eurocambios.com.py/v2/sgi/utilsDto.php"
+        data = {'param': 'getCotizacionesbySucursal', 'sucursal': '1'}
+        result = requests.post(url, data, timeout=10).json()
+        compra = result[0]['compra']
+        venta = result[0]['venta']
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -195,9 +212,10 @@ def create_json():
     setcompra, setventa = setgov()
     intcompra, intventa = interfisa()
     ambcompra, ambventa = amambay()
+    eccompra, ecventa = eurocambio()
     mydcompra, mydventa = myd()
-    #famicompra, famiventa = familiar()
     bbvacompra, bbvaventa = bbva()
+    # famicompra, famiventa = familiar()
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -232,6 +250,10 @@ def create_json():
             'mydcambios': {
                 'compra': mydcompra,
                 'venta': mydventa
+            },
+            'eurocambios': {
+                'compra': eccompra,
+                'venta': ecventa
             },
             # 'familiar': {
             #     'compra': famicompra,
