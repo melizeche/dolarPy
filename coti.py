@@ -203,6 +203,20 @@ def bbva():
 
     return Decimal(compra), Decimal(venta)
 
+def mundial():
+    try:
+        url     = "http://www.mundialcambios.com.py/json.php"
+        data    = {'id': '6'}
+        headers = {'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Accept-Language': 'es-ES,es;q=0.9', 'Connection': 'keep-alive', 'Content-Length': '4', 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36' }
+        result  = requests.post(url, data, headers=headers, timeout=10).json()
+        compra  = result['data']['cambios']['0']['cot_compra']
+        venta   = result['data']['cambios']['0']['cot_venta']
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
 
 def create_json():
     mcompra, mventa = maxi()
@@ -216,6 +230,8 @@ def create_json():
     mydcompra, mydventa = myd()
     bbvacompra, bbvaventa = bbva()
     # famicompra, famiventa = familiar()
+    wcompra, wventa = mundial()
+
     respjson = {
         'dolarpy': {
             'cambiosalberdi': {
@@ -262,6 +278,10 @@ def create_json():
             'bbva': {
                 'compra': bbvacompra,
                 'venta': bbvaventa
+            },
+            'mundialcambios': {
+                'compra': wcompra,
+                'venta': wventa
             },
         },
         "updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
