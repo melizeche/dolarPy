@@ -1,7 +1,9 @@
 # dolarPy
+Checks USD/PYG exchange rate from several sites, with a calculator, RESTful API and a twitter bot
 
-* Webservice: (coti.py) Checks USD/PYG exchange rate from several sites every 10 minutes, displays in json
-* TwitterBot: Reads webservice output and tweet it(in a human readable format)
+* [Scraper: ](coti.py) Checks USD/PYG exchange rate from several sites every 10 minutes, saves the info in a json file
+* [Webservice: ](cotiapp.py) Flask app to serve the API and display the main website with the calculator
+* [TwitterBot: ](single_tweet_bot.py) Reads the webservice output and tweet it(in a human readable format)
 
 #### DEMO/Webservice
 
@@ -34,7 +36,8 @@ https://twitter.com/DolarPy
 ```
 git clone git@github.com:melizeche/dolarPy.git
 cd dolarPy
-virtualenv env
+python3 -m venv env
+# if venv module is not installed install with `sudo apt install python3-venv`
 source env/bin/activate
 pip install -r requirements.txt
 crontab -e (add coti.py) // See example below
@@ -85,6 +88,7 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 * Carlos Carvallo https://github.com/carloscarvallo
 * Carlos Laspina https://github.com/claspina
 * Carlos Vallejos  https://github.com/cabupy
+* Christian Zelaya https://github.com/eduzetapy
 * Diego Díaz https://github.com/berithpy
 * Diego Zacarías https://github.com/zv3
 * Ivan Koop https://github.com/ivankoop
