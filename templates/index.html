@@ -17,11 +17,15 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <!-- Square card -->
     <style>
+        body{
+                        margin-left: 32px;
+
+        }
         .aldrich {
         font-family: 'Aldrich',"Roboto","Helvetica","Arial",sans-serif
         }
         .dolarpy-card-square.mdl-card {
-        width: 320px;
+        width: 280px;
         height: 230px;
         }
         .dolarpy-card-square > .mdl-card__title {
@@ -39,6 +43,18 @@
         .mdl-textfield__input.grande{
         font-size: 40px;
         }
+
+        .flex{
+            display: flex;
+            flex-wrap : wrap;
+        }
+        
+        .card-container{
+            margin: 12px 10px;
+        }
+        .footer{
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body style="background-color:#EFEFEF;">
@@ -55,8 +71,8 @@
 </div>
 
 
-<div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--3-col">
+<div class="flex">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -80,7 +96,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -104,7 +120,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -128,7 +144,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -159,7 +175,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -184,7 +200,7 @@
     </div>
 
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -208,7 +224,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -233,7 +249,7 @@
     </div>
 
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -257,7 +273,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -282,7 +298,7 @@
     </div>
 
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -306,7 +322,7 @@
 
     </div>
 
-    <div class="mdl-cell mdl-cell--3-col">
+    <div class="card-container">
 
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
@@ -331,10 +347,13 @@
     </div>
 
 </div>
-<h6>Actualizado: <span id="updated"></span></h6>
+<div class = "footer">
+<h5 style="font-size: 1.2em;">Actualizado: <span id="updated"></span></h5>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
 <h5 id="algo">Twitter bot <a href="https://twitter.com/dolarpy">@DolarPy</a></h5>
 <h5 id="algo">Código en <a href="https://github.com/melizeche/dolarPy">Github</a></h5>
+</div>
+
 
 <script type="text/javascript">
 /*
