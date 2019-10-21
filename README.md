@@ -93,6 +93,7 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 * Diego Zacarías https://github.com/zv3
 * Ivan Koop https://github.com/ivankoop
 * Mauricio Medina https://github.com/mauri-medina
+* Taras Samoilenko https://github.com/cos1715
 
 ## TODO(APIv2)
 
