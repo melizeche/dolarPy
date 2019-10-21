@@ -21,6 +21,24 @@ def format_decimal(number):
     return str(number).replace(".", "").replace(",", ".")
 
 
+def vision():
+    soup = None
+    try:
+        soup = BeautifulSoup(
+            requests.get('https://www.visionbanco.com', timeout=10,
+                         headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
+
+        efectivo = soup.select('#efectivo')[0]
+        compra = efectivo.select('table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+        venta = efectivo.select('table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
 def chaco():
     try:
         soup = json.loads(
@@ -269,6 +287,7 @@ def create_json():
     bbvacompra, bbvaventa = bbva()
     # famicompra, famiventa = familiar()
     wcompra, wventa = mundial()
+    visioncompra, visionventa = vision()
 
     respjson = {
         "dolarpy": {
@@ -291,6 +310,10 @@ def create_json():
             # }
             "bbva": {"compra": bbvacompra, "venta": bbvaventa},
             "mundialcambios": {"compra": wcompra, "venta": wventa},
+            'vision': {
+                'compra': visioncompra,
+                'venta': visionventa,
+            }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
