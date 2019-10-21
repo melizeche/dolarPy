@@ -30,17 +30,13 @@ def vision():
 
         efectivo = soup.select('#efectivo')[0]
         compra = efectivo.select('table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-        venta  = efectivo.select('table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-
-        online = soup.select('#online')[0]
-        comprao = online.select('table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-        ventao  = online.select('table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+        venta = efectivo.select('table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
     except requests.ConnectionError:
-        compra, venta, comprao, ventao = 0, 0, 0, 0
+        compra, venta = 0, 0
     except:
-        compra, venta, comprao, ventao = 0, 0, 0, 0
+        compra, venta = 0, 0
 
-    return Decimal(compra), Decimal(venta), Decimal(comprao), Decimal(ventao)
+    return Decimal(compra), Decimal(venta)
 
 
 def chaco():
@@ -291,7 +287,7 @@ def create_json():
     bbvacompra, bbvaventa = bbva()
     # famicompra, famiventa = familiar()
     wcompra, wventa = mundial()
-    visioncompra, visionventa, visioncomprao, visionventao = vision()
+    visioncompra, visionventa = vision()
 
     respjson = {
         "dolarpy": {
@@ -317,8 +313,6 @@ def create_json():
             'vision': {
                 'compra': visioncompra,
                 'venta': visionventa,
-                'compra_online': visioncomprao,
-                'venta_online': visionventao
             }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
