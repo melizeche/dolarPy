@@ -94,8 +94,10 @@ def alberdi():
         compra, venta = 0, 0
     except:
         compra, venta = 0, 0
-
-    return Decimal(compra), Decimal(venta)
+    try:
+        return Decimal(compra), Decimal(venta)
+    except:
+        return 0, 0
 
 
 def bcp():
