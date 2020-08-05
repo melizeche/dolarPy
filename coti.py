@@ -29,8 +29,10 @@ def vision():
                          headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
 
         efectivo = soup.select('#efectivo')[0]
-        compra = efectivo.select('table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-        venta = efectivo.select('table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+        compra = efectivo.select(
+            'table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+        venta = efectivo.select(
+            'table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -71,10 +73,11 @@ def maxi():
             "html.parser",
         )
 
-        tr_dolar = soup.find(class_="fixed-plugin").find("table").find("tbody").find("tr")
+        tr_dolar = soup.find(
+            class_="fixed-plugin").find("table").find("tbody").find("tr")
 
         compra = tr_dolar.find_all('td')[1].text
-        venta  = tr_dolar.find_all('td')[2].text
+        venta = tr_dolar.find_all('td')[2].text
 
     except requests.ConnectionError:
         compra, venta = 0, 0
@@ -131,8 +134,10 @@ def bcp():
             class_="table table-striped table-bordered table-condensed"
         ).select("tr > td:nth-of-type(5)")
         posicion = len(compra_array) - 1
-        compra = compra_array[posicion].get_text().replace(".", "").replace(",", ".")
-        venta = venta_array[posicion].get_text().replace(".", "").replace(",", ".")
+        compra = compra_array[posicion].get_text().replace(
+            ".", "").replace(",", ".")
+        venta = venta_array[posicion].get_text().replace(
+            ".", "").replace(",", ".")
     except requests.ConnectionError:
         compra, venta, ref = 0, 0, 0
     except:
@@ -144,14 +149,17 @@ def bcp():
 def setgov():
     try:
         soup = BeautifulSoup(
-            requests.get("http://www.set.gov.py/portal/PARAGUAY-SET", timeout=10).text,
+            requests.get(
+                "http://www.set.gov.py/portal/PARAGUAY-SET", timeout=10).text,
             "html.parser",
         )
         compra = (
-            soup.select("td.UICotizacion")[0].text.replace("G. ", "").replace(".", "")
+            soup.select("td.UICotizacion")[0].text.replace(
+                "G. ", "").replace(".", "")
         )
         venta = (
-            soup.select("td.UICotizacion")[1].text.replace("G. ", "").replace(".", "")
+            soup.select("td.UICotizacion")[1].text.replace(
+                "G. ", "").replace(".", "")
         )
     except requests.ConnectionError:
         compra, venta = 0, 0
