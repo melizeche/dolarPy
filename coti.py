@@ -191,7 +191,7 @@ def interfisa():
 def amambay():
     try:
         soup = requests.get(
-            "http://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange",
+            "https://www.bancobasa.com.py/ebanking_ext/api/data/currency_exchange",
             timeout=10,
         ).json()
         compra = soup["currencyExchanges"][0]["purchasePrice"]
