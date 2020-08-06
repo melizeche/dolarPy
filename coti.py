@@ -271,26 +271,21 @@ def bbva():
 
 
 def mundial():
+    soup = None
     try:
-        url = "http://www.mundialcambios.com.py/json.php"
-        data = {"id": "6"}
-        headers = {
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate",
-            "Accept-Language": "es-ES,es;q=0.9",
-            "Connection": "keep-alive",
-            "Content-Length": "4",
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
-        }
-        result = requests.post(url, data, headers=headers, timeout=10).json()
-        compra = result["data"]["cambios"]["0"]["cot_compra"]
-        venta = result["data"]["cambios"]["0"]["cot_venta"]
+        soup = BeautifulSoup(
+            requests.get('http://www.mundialcambios.com.py/?branch=6',
+                         timeout=20,
+                         headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}).text,
+            "html.parser")
+        compra = soup.select(
+            'h3.divisa')[0].get_text().replace('.', '')
+        venta = soup.select(
+            'h3.divisa')[1].get_text().replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
         compra, venta = 0, 0
-
     return Decimal(compra), Decimal(venta)
 
 
