@@ -29,8 +29,10 @@ def vision():
                          headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
 
         efectivo = soup.select('#efectivo')[0]
-        compra = efectivo.select('table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-        venta = efectivo.select('table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+        compra = efectivo.select(
+            'table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+        venta = efectivo.select(
+            'table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
@@ -71,10 +73,11 @@ def maxi():
             "html.parser",
         )
 
-        tr_dolar = soup.find(class_="fixed-plugin").find("table").find("tbody").find("tr")
+        tr_dolar = soup.find(
+            class_="fixed-plugin").find("table").find("tbody").find("tr")
 
         compra = tr_dolar.find_all('td')[1].text
-        venta  = tr_dolar.find_all('td')[2].text
+        venta = tr_dolar.find_all('td')[2].text
 
     except requests.ConnectionError:
         compra, venta = 0, 0
@@ -131,8 +134,10 @@ def bcp():
             class_="table table-striped table-bordered table-condensed"
         ).select("tr > td:nth-of-type(5)")
         posicion = len(compra_array) - 1
-        compra = compra_array[posicion].get_text().replace(".", "").replace(",", ".")
-        venta = venta_array[posicion].get_text().replace(".", "").replace(",", ".")
+        compra = compra_array[posicion].get_text().replace(
+            ".", "").replace(",", ".")
+        venta = venta_array[posicion].get_text().replace(
+            ".", "").replace(",", ".")
     except requests.ConnectionError:
         compra, venta, ref = 0, 0, 0
     except:
@@ -144,14 +149,17 @@ def bcp():
 def setgov():
     try:
         soup = BeautifulSoup(
-            requests.get("http://www.set.gov.py/portal/PARAGUAY-SET", timeout=10).text,
+            requests.get(
+                "http://www.set.gov.py/portal/PARAGUAY-SET", timeout=10).text,
             "html.parser",
         )
         compra = (
-            soup.select("td.UICotizacion")[0].text.replace("G. ", "").replace(".", "")
+            soup.select("td.UICotizacion")[0].text.replace(
+                "G. ", "").replace(".", "")
         )
         venta = (
-            soup.select("td.UICotizacion")[1].text.replace("G. ", "").replace(".", "")
+            soup.select("td.UICotizacion")[1].text.replace(
+                "G. ", "").replace(".", "")
         )
     except requests.ConnectionError:
         compra, venta = 0, 0
@@ -183,7 +191,7 @@ def interfisa():
 def amambay():
     try:
         soup = requests.get(
-            "http://www.bancoamambay.com.py/ebanking_ext/api/data/currency_exchange",
+            "https://www.bancobasa.com.py/ebanking_ext/api/data/currency_exchange",
             timeout=10,
         ).json()
         compra = soup["currencyExchanges"][0]["purchasePrice"]
@@ -263,26 +271,21 @@ def bbva():
 
 
 def mundial():
+    soup = None
     try:
-        url = "http://www.mundialcambios.com.py/json.php"
-        data = {"id": "6"}
-        headers = {
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate",
-            "Accept-Language": "es-ES,es;q=0.9",
-            "Connection": "keep-alive",
-            "Content-Length": "4",
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36",
-        }
-        result = requests.post(url, data, headers=headers, timeout=10).json()
-        compra = result["data"]["cambios"]["0"]["cot_compra"]
-        venta = result["data"]["cambios"]["0"]["cot_venta"]
+        soup = BeautifulSoup(
+            requests.get('http://www.mundialcambios.com.py/?branch=6',
+                         timeout=20,
+                         headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}).text,
+            "html.parser")
+        compra = soup.select(
+            'h3.divisa')[0].get_text().replace('.', '')
+        venta = soup.select(
+            'h3.divisa')[1].get_text().replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
         compra, venta = 0, 0
-
     return Decimal(compra), Decimal(venta)
 
 
