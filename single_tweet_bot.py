@@ -17,9 +17,9 @@ response =  updated + "\n\n" \
             "💱\n■ Cambios Chaco:\n"\
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['compra']).replace(',','.')[:-2] + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambioschaco']['venta']).replace(',','.')[:-2] + \
-            "\n■ Alberdi:\n" \
-            "Compra: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['compra']).replace(',','.')[:-2] + \
-            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['cambiosalberdi']['venta']).replace(',','.')[:-2] + \
+            "\n■ Mundial Cambios:\n" \
+            "Compra: " + "{:,}".format(dolarjson['dolarpy']['mundialcambios']['compra']).replace(',','.')[:-2] + \
+            " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mundialcambios']['venta']).replace(',','.')[:-2] + \
             "\n■ MyD Cambios:\n" \
             "Compra: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['compra']).replace(',','.')[:-2] + \
             " | Venta: " + "{:,}".format(dolarjson['dolarpy']['mydcambios']['venta']).replace(',','.')[:-2] + \
