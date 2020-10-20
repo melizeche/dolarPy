@@ -360,6 +360,30 @@
 
     </div>
 
+    <div class="margin-bottom">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                    <div class="mdl-card__title-text derecha" id="cbonanza"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                    <div class="mdl-card__title-text derecha" id="vbonanza"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Bonanza Cambios
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -396,6 +420,8 @@ var wcompra;
 var wventa;
 var cvision;
 var vvision;
+var cbonanza;
+var vbonanza;
 
     function get_coti(){
         $.get("/api/1.0/",
@@ -427,6 +453,8 @@ var vvision;
                     wventa = json.dolarpy.mundialcambios.venta;
                     cvision = json.dolarpy.vision.compra;
                     vvision = json.dolarpy.vision.venta;
+                    cbonanza = json.dolarpy.bonanza.compra;
+                    vbonanza = json.dolarpy.bonanza.venta;
 
 
                     $("#cchaco").text(cchaco).autoNumeric('init');
@@ -454,6 +482,8 @@ var vvision;
                     $("#wventa").text(wventa).autoNumeric('init');
                     $("#cvision").text(cvision).autoNumeric('init');
                     $("#vvision").text(vvision).autoNumeric('init');
+                    $("#cbonanza").text(cbonanza).autoNumeric('init');
+                    $("#vbonanza").text(vbonanza).autoNumeric('init');
                     $("#cuanto").autoNumeric('init');
                     $("#updated").text(json.updated);
                 }
@@ -538,6 +568,11 @@ var vvision;
             $("#cvision").text(valor*cvision).autoNumeric('init');
             $("#vvision").autoNumeric('destroy');
             $("#vvision").text(valor*vvision).autoNumeric('init');
+            //
+            $("#cbonanza").autoNumeric('destroy');
+            $("#cbonanza").text(valor*cbonanza).autoNumeric('init');
+            $("#vbonanza").autoNumeric('destroy');
+            $("#vbonanza").text(valor*vbonanza).autoNumeric('init');
         });
     });
 

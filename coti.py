@@ -239,6 +239,32 @@ def myd():
     return Decimal(compra), Decimal(venta)
 
 
+def bonanza():
+    url = "https://bonanzacambios.com.py/"
+    try:
+        soup = BeautifulSoup(
+            requests.get(
+                url,
+                timeout=10,
+                headers={"user-agent": "Mozilla/5.0"},
+                verify=False,
+            ).text,
+            "html.parser",
+        )
+
+        tr_dolar = soup.select(".table-pricing.style1 table tbody tr td.moneda")
+
+        compra = tr_dolar[0].get_text().replace('.', '')
+        venta = tr_dolar[1].get_text().replace('.', '')
+
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
 # def familiar():  # Comentado porque el servidor bloquea las peticiones
 #     try:
 #         soup = BeautifulSoup(
@@ -303,6 +329,7 @@ def create_json():
     # famicompra, famiventa = familiar()
     wcompra, wventa = mundial()
     visioncompra, visionventa = vision()
+    bonanzacompra, bonanzaventa = bonanza()
 
     respjson = {
         "dolarpy": {
@@ -328,6 +355,10 @@ def create_json():
             'vision': {
                 'compra': visioncompra,
                 'venta': visionventa,
+            },
+            'bonanza': {
+                'compra': bonanzacompra,
+                'venta': bonanzaventa,
             }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
