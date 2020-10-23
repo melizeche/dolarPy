@@ -281,6 +281,27 @@ def bonanza():
 #     return Decimal(compra), Decimal(venta)
 
 
+def lamoneda():
+    try:
+        soup = BeautifulSoup(
+            requests.get(
+                "http://www.lamoneda.com.py/", timeout=10).text,
+            "html.parser",
+        )
+        casacentral = soup.select("#cotizaciones table tr:nth-of-type(2)")[0]
+        compra = (
+            casacentral.select("td:nth-of-type(3) > div")[0].text.replace(".", "")
+        )
+        venta = (
+            casacentral.select("td:nth-of-type(4) > div")[0].text.replace(".", "")
+        )
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except:
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
 def bbva():
     try:
         soup = requests.get(
@@ -330,6 +351,7 @@ def create_json():
     wcompra, wventa = mundial()
     visioncompra, visionventa = vision()
     bonanzacompra, bonanzaventa = bonanza()
+    lamonedacompra, lamonedaventa = lamoneda()
 
     respjson = {
         "dolarpy": {
@@ -359,6 +381,10 @@ def create_json():
             'bonanza': {
                 'compra': bonanzacompra,
                 'venta': bonanzaventa,
+            },
+            'lamoneda': {
+                'compra': lamonedacompra,
+                'venta': lamonedaventa,
             }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
