@@ -190,12 +190,13 @@ def interfisa():
 
 def amambay():
     try:
-        soup = requests.get(
-            "https://www.bancobasa.com.py/ebanking_ext/api/data/currency_exchange",
-            timeout=10,
-        ).json()
-        compra = soup["currencyExchanges"][0]["purchasePrice"]
-        venta = soup["currencyExchanges"][0]["salePrice"]
+        soup = BeautifulSoup(
+            requests.get(
+                "https://www.bancobasa.com.py/", timeout=10).text,
+            "html.parser",
+        )
+        compra = soup.select(".trendscontent > li:nth-of-type(1) > a > .compra")[0].text.replace(".", "") 
+        venta = soup.select(".trendscontent > li:nth-of-type(1) > a > .venta")[0].text.replace(".", "") 
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
