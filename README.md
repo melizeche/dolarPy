@@ -16,6 +16,8 @@ https://twitter.com/DolarPy
 #### Mobile
 
 * For Android  https://github.com/ivankoop/DolarPy-Android
+* For Android-Kotlin https://github.com/LucasGinard/DolarPy-Android-Kotlin
+
 
 #### API wrappers
 
@@ -96,6 +98,8 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 * Mauricio Medina https://github.com/mauri-medina
 * Taras Samoilenko https://github.com/cos1715
 * Alcides Rivarola https://github.com/alcides29
+* Lucas Ginard https://github.com/LucasGinard
+
 
 ## TODO(APIv2)
 
