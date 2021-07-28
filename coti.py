@@ -306,7 +306,7 @@ def lamoneda():
 def bbva():
     try:
         soup = requests.get(
-            "https://www.bbva.com.py/Yaguarete/public/quotations", timeout=10
+            "https://www.bancognbcaminamosjuntos.com.py/Yaguarete/public/quotations", timeout=10
         ).json()
         compra = soup[0]["cashBuyPrice"]
         venta = soup[0]["cashSellPrice"]
@@ -373,7 +373,7 @@ def create_json():
             #     'compra': famicompra,
             #     'venta': famiventa
             # }
-            "bbva": {"compra": bbvacompra, "venta": bbvaventa},
+            "gnbfusion": {"compra": bbvacompra, "venta": bbvaventa},
             "mundialcambios": {"compra": wcompra, "venta": wventa},
             'vision': {
                 'compra': visioncompra,
