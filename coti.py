@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import json
-import string
 import requests
 import urllib3
 
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
-import collections
-collections.Callable = collections.abc.Callable
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
@@ -92,31 +88,24 @@ def maxi():
 
 def alberdi():
     try:
-        # url = "http://www.cambiosalberdi.com/ws/getCotizaciones.json"
-        # soup = requests.get(url, timeout=10).json()
-        # compra = soup["asuncion"][0]["compra"].replace(".", "")
-        # venta = soup["asuncion"][0]["venta"].replace(".", "")
-        today = datetime.today().strftime("%d%m%Y")
-        url = "http://www.cambiosalberdi.com/"
         soup = BeautifulSoup(
             requests.get(
-                url,
+                "http://www.cambiosalberdi.com/index.php",
                 timeout=10,
                 headers={"user-agent": "Mozilla/5.0"},
                 verify=False,
-            ).text,
+                ).text,
             "html.parser",
         )
 
-        tr_dolar = soup.find(
-            class_=" mix ciudaddeleste-ico").find(
-                class_="col-md-12 post ").find(
-                    class_="blog_custom_listings").find(
-                        class_="listings_details").find(
-                            class_="recent-received-goals")
-        compra = tr_dolar.find_all('h6')[0].text.replace(".", "")
-        compra = compra[0:5]
-        venta = tr_dolar.find_all('span')[0].text.replace(".", "")
+        casamatriz = soup.select("#operaciones section.cd-gallery li.villamorra-ico")[0]
+
+        array = casamatriz.find(
+            class_="recent-received-goals"
+        ).select("h6:nth-of-type(1)")[0].get_text().split()
+
+        compra = array[0].replace('.', '')
+        venta =  array[1].replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
