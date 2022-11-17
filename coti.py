@@ -89,10 +89,24 @@ def maxi():
 
 def alberdi():
     try:
-        url = "http://cambiosalberdi.com/ws/getCotizaciones.json"
-        soup = requests.get(url, timeout=10).json()
-        compra = soup["asuncion"][0]["compra"].replace(".", "")
-        venta = soup["asuncion"][0]["venta"].replace(".", "")
+        soup = BeautifulSoup(
+            requests.get(
+                "http://www.cambiosalberdi.com/index.php",
+                timeout=10,
+                headers={"user-agent": "Mozilla/5.0"},
+                verify=False,
+                ).text,
+            "html.parser",
+        )
+
+        casamatriz = soup.select("#operaciones section.cd-gallery li.villamorra-ico")[0]
+
+        array = casamatriz.find(
+            class_="recent-received-goals"
+        ).select("h6:nth-of-type(1)")[0].get_text().split()
+
+        compra = array[0].replace('.', '')
+        venta =  array[1].replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
