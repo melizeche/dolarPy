@@ -4,3 +4,7 @@ CONSUMER_KEY = 'abc123...'
 CONSUMER_SECRET = 'def456...'
 ACCESS_KEY = 'ghi789...'
 ACCESS_SECRET = 'jkl012...'
+
+# From your Mastodon instance
+MASTODON_ACCESS_TOKEN = 'asrgasg'
+MASTODON_API_BASE = 'https://terere.social'

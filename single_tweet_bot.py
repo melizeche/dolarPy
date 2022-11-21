@@ -34,3 +34,14 @@ response =  updated + "\n\n" \
             " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['set']['venta'])).replace(',','.')
 
 api.update_status(status=response)
+
+try:  # Mastodon integration
+    from mastodon import Mastodon
+    from config import MASTODON_ACCESS_TOKEN, MASTODON_API_BASE
+
+    mastodon = Mastodon(access_token=MASTODON_ACCESS_TOKEN, api_base_url = MASTODON_API_BASE)
+
+    mastodon.status_post(response, language='es')
+
+except Exception as e:
+    print(e)
