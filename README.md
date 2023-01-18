@@ -42,6 +42,7 @@ python3 -m venv env
 # if venv module is not installed install with `sudo apt install python3-venv`
 source env/bin/activate
 pip install -r requirements.txt
+playwright install
 crontab -e (add coti.py) // See example below
 python cotiapp.py
 ```
@@ -55,6 +56,7 @@ virtualenv -p python3 env
 # activate the virtualenv:
 source env/bin/activate
 pip3 install -r requirements.txt
+playwright install
 # and the run
 # if you need to deactivate the virtualenv:
 deactivate
@@ -101,6 +103,8 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 * Lucas Ginard https://github.com/LucasGinard
 * Padaleiana https://github.com/padaleiana
 * nestorcde https://github.com/nestorcde
+* Lucas Martinez https://github.com/martinezlucas98
+
 
 ## TODO(APIv2)
 
