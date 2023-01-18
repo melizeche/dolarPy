@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
@@ -164,16 +165,20 @@ def setgov():
     try:
         soup = BeautifulSoup(
             requests.get(
-                "http://www.set.gov.py/portal/PARAGUAY-SET", timeout=10).text,
+                "https://www.set.gov.py/portal/PARAGUAY-SET",
+                timeout=10,
+                headers={"user-agent": "Mozilla/5.0"},
+                verify=False,
+            ).text,
             "html.parser",
         )
         compra = (
             soup.select("td.UICotizacion")[0].text.replace(
-                "G. ", "").replace(".", "")
+                "G. ", "").replace(".", "").strip()
         )
         venta = (
             soup.select("td.UICotizacion")[1].text.replace(
-                "G. ", "").replace(".", "")
+                "G. ", "").replace(".", "").strip()
         )
     except requests.ConnectionError:
         compra, venta = 0, 0
