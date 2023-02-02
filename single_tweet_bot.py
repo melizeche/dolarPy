@@ -41,7 +41,7 @@ try:  # Mastodon integration
 
     mastodon = Mastodon(access_token=MASTODON_ACCESS_TOKEN, api_base_url = MASTODON_API_BASE)
 
-    mastodon.status_post(response, language='es')
+    mastodon.status_post(response, language='es', visibility="unlisted")
 
 except Exception as e:
     print(e)
