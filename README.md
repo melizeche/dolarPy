@@ -17,7 +17,7 @@ https://twitter.com/DolarPy
 
 * For Android  https://github.com/ivankoop/DolarPy-Android
 * For Android-Kotlin https://github.com/LucasGinard/DolarPy-Android-Kotlin
-
+* For iOS https://github.com/LucasGinard/DolarPy-iOS
 
 #### API wrappers
 
