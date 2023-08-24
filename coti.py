@@ -343,8 +343,8 @@ def bbva():
         soup = requests.get(
             "https://www.bancognb.com.py/public/currency_quotations", timeout=10
         ).json()
-        compra = soup[0]["cashBuyPrice"]
-        venta = soup[0]["cashSellPrice"]
+        compra = soup["exchangeRates"][0]["cashBuyPrice"]
+        venta = soup["exchangeRates"][0]["cashSellPrice"]
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
