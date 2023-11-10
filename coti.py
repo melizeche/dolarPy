@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
+#urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
