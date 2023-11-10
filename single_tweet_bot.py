@@ -34,7 +34,7 @@ response =  updated + "\n\n" \
             "Compra: " + "{:,}".format(int(dolarjson['dolarpy']['set']['compra'])).replace(',','.') +\
             " | Venta: " + "{:,}".format(int(dolarjson['dolarpy']['set']['venta'])).replace(',','.')
 
-client.create_tweet=(text=response)
+client.create_tweet(text=response)
 
 try:  # Mastodon integration
     from mastodon import Mastodon
