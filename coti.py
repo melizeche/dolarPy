@@ -113,6 +113,8 @@ def alberdi():
                     compra = cells[1].text.strip()
                     venta = cells[2].text.strip()
                     return Decimal(compra), Decimal(venta)
+                else:
+                    compra, venta = 0, 0
 
     except requests.ConnectionError:
         compra, venta = 0, 0
