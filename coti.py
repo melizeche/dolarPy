@@ -110,8 +110,8 @@ def alberdi():
                 currency_name = cells[0].text.strip()
 
                 if "Dólar Americano" in currency_name:
-                    compra = cells[1].text.strip()
-                    venta = cells[2].text.strip()
+                    compra = cells[1].text.strip().replace('.', '')
+                    venta = cells[2].text.strip().replace('.', '')
                     return Decimal(compra), Decimal(venta)
                 else:
                     compra, venta = 0, 0
