@@ -91,26 +91,36 @@ def alberdi():
     try:
         soup = BeautifulSoup(
             requests.get(
-                "http://www.cambiosalberdi.com/index.php",
+                "https://www.cambiosalberdi.com/langes/index.php#sectionCotizacion",
                 timeout=10,
                 headers={"user-agent": "Mozilla/5.0"},
                 verify=False,
-                ).text,
+            ).text,
             "html.parser",
         )
 
-        casamatriz = soup.select("#operaciones section.cd-gallery li.villamorra-ico")[0]
+        table = soup.find('table', class_='table')
 
-        array = casamatriz.find(
-            class_="recent-received-goals"
-        ).select("h6:nth-of-type(1)")[0].get_text().split()
+        if table:
+            rows = table.tbody.find_all('tr')
 
-        compra = array[0].replace('.', '')
-        venta =  array[1].replace('.', '')
+            for row in rows:
+                cells = row.find_all('td')
+
+                currency_name = cells[0].text.strip()
+
+                if "Dólar Americano" in currency_name:
+                    compra = cells[1].text.strip().replace('.', '')
+                    venta = cells[2].text.strip().replace('.', '')
+                    return Decimal(compra), Decimal(venta)
+                else:
+                    compra, venta = 0, 0
+
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
         compra, venta = 0, 0
+
     try:
         return Decimal(compra), Decimal(venta)
     except:
