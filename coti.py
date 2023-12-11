@@ -7,9 +7,13 @@ import urllib3
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
+from playwright.sync_api import sync_playwright 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 #urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
+
+# Global variables
+conti_xhr_val = {}
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
@@ -381,6 +385,48 @@ def mundial():
         compra, venta = 0, 0
     return Decimal(compra), Decimal(venta)
 
+def conti_xhr(response):
+    global conti_xhr_val
+    try:
+        if (response.url == "https://apibanking-gw.bancontinental.com.py/divisas/v1/api/monedas/cotizaciones"):
+            monedas = response.json()
+            for m in monedas:
+                if m['divisa'] == 'DOLAR CHQ./TRANSF.':
+                    conti_xhr_val['chq_transf']={
+                        'compra': m['compra'],
+                        'venta': m['venta']
+                    }
+                elif m['divisa'] == 'DOLAR EFECTIVO':
+                    conti_xhr_val['efectivo']={
+                        'compra': m['compra'],
+                        'venta': m['venta']
+                    }
+    except:
+        pass
+
+def conti(intentos=2):
+    global conti_xhr_val
+    compra = venta = compra_chq = venta_chq = 0
+    if intentos>0:
+        with sync_playwright() as p: 
+            url = "http://www.bancontinental.com.py/#/" 
+            browser = p.chromium.launch()
+            page = browser.new_page()
+
+            page.on("response", lambda response: conti_xhr(response)) 
+            page.goto(url, wait_until="networkidle", timeout=90000) 
+        
+            page.context.close() 
+            browser.close()
+        try:
+            compra = conti_xhr_val['efectivo']['compra']
+            venta = conti_xhr_val['efectivo']['venta']
+            compra_chq = conti_xhr_val['chq_transf']['compra']
+            venta_chq = conti_xhr_val['chq_transf']['venta']
+        except:
+            return conti(intentos-1)
+    return Decimal(compra), Decimal(venta), Decimal(compra_chq), Decimal(venta_chq)
+
 
 def create_json():
     mcompra, mventa = maxi()
@@ -398,6 +444,7 @@ def create_json():
     visioncompra, visionventa = vision()
     bonanzacompra, bonanzaventa = bonanza()
     lamonedacompra, lamonedaventa = lamoneda()
+    conticompra, contiventa, conticomprachq, contiventachq = conti()
 
     respjson = {
         "dolarpy": {
@@ -431,6 +478,14 @@ def create_json():
             'lamoneda': {
                 'compra': lamonedacompra,
                 'venta': lamonedaventa,
+            },
+            'contichq': {
+                'compra': conticomprachq,
+                'venta': contiventachq,
+            },
+            'conti': {
+                'compra': conticompra,
+                'venta': contiventa,
             }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
