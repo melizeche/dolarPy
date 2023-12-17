@@ -52,6 +52,7 @@ def handle_exceptions(fn):
     return wrapper
 
 
+@handle_exceptions
 def vision():
     soup = None
     soup = BeautifulSoup(
