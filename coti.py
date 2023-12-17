@@ -11,6 +11,21 @@ from datetime import datetime
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 #urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
+import argparse
+
+parser = argparse.ArgumentParser(
+                    prog='dolarPy',
+                    epilog='dolarPy')
+
+parser.add_argument('-v', '--verbose',
+                    action='store_true')
+
+args = parser.parse_args()
+
+def verbose_print(str):
+    if args.verbose:
+        print(str)
+
 def decimal_default(obj):
     if isinstance(obj, Decimal):
         return float(obj)
@@ -21,105 +36,103 @@ def format_decimal(number):
     return str(number).replace(".", "").replace(",", ".")
 
 
+def exception_handler(log, func):
+    verbose_print("Error in %s : %s" % (func, log))
+
+
+def handle_exceptions(fn):
+    from functools import wraps
+    @wraps(fn)
+    def wrapper(*args, **kw):
+        try:
+            return fn(*args, **kw)
+        except Exception as e:
+            exception_handler(e, fn.__name__)
+            return Decimal(0), Decimal(0)
+    return wrapper
+
+
+@handle_exceptions
 def vision():
     soup = None
-    try:
-        soup = BeautifulSoup(
-            requests.get('https://www.visionbanco.com', timeout=10,
-                         headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
+    soup = BeautifulSoup(
+        requests.get('https://www.visionbanco.com', timeout=10,
+                     headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
 
-        efectivo = soup.select('#efectivo')[0]
-        compra = efectivo.select(
-            'table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-        venta = efectivo.select(
-            'table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+    efectivo = soup.select('#efectivo')[0]
+    compra = efectivo.select(
+        'table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
+    venta = efectivo.select(
+        'table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
 
     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def chaco():
-    try:
-        soup = json.loads(
-            requests.get(
-                "http://www.cambioschaco.com.py/api/branch_office/1/exchange",
-                timeout=10,
-            ).text
-        )
-        compra = soup["items"][0]["purchasePrice"]
-        venta = soup["items"][0]["salePrice"]
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+    soup = json.loads(
+        requests.get(
+            "http://www.cambioschaco.com.py/api/branch_office/1/exchange",
+            timeout=10,
+        ).text
+    )
+    compra = soup["items"][0]["purchasePrice"]
+    venta = soup["items"][0]["salePrice"]
 
     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def maxi():
     today = datetime.today().strftime("%d%m%Y")
     url = "https://www.maxicambios.com.py/"
-    try:
-        soup = BeautifulSoup(
-            requests.get(
-                url,
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
+    soup = BeautifulSoup(
+        requests.get(
+            url,
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
 
-        tr_dolar = soup.find(
-            class_="fixed-plugin").find("table").find("tbody").find("tr")
+    tr_dolar = soup.find(
+        class_="fixed-plugin").find("table").find("tbody").find("tr")
 
-        compra = tr_dolar.find_all('td')[1].text
-        venta = tr_dolar.find_all('td')[2].text
-
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+    compra = tr_dolar.find_all('td')[1].text
+    venta = tr_dolar.find_all('td')[2].text
 
     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def alberdi():
-    try:
-        soup = BeautifulSoup(
-            requests.get(
-                "https://www.cambiosalberdi.com/langes/index.php#sectionCotizacion",
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
+    soup = BeautifulSoup(
+        requests.get(
+            "https://www.cambiosalberdi.com/langes/index.php#sectionCotizacion",
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
 
-        table = soup.find('table', class_='table')
+    table = soup.find('table', class_='table')
 
-        if table:
-            rows = table.tbody.find_all('tr')
+    if table:
+        rows = table.tbody.find_all('tr')
 
-            for row in rows:
-                cells = row.find_all('td')
+        for row in rows:
+            cells = row.find_all('td')
 
-                currency_name = cells[0].text.strip()
+            currency_name = cells[0].text.strip()
 
-                if "Dólar Americano" in currency_name:
-                    compra = cells[1].text.strip().replace('.', '')
-                    venta = cells[2].text.strip().replace('.', '')
-                    return Decimal(compra), Decimal(venta)
-                else:
-                    compra, venta = 0, 0
-
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+            if "Dólar Americano" in currency_name:
+                compra = cells[1].text.strip().replace('.', '')
+                venta = cells[2].text.strip().replace('.', '')
+                return Decimal(compra), Decimal(venta)
+            else:
+                compra, venta = 0, 0
 
     try:
         return Decimal(compra), Decimal(venta)
@@ -127,73 +140,64 @@ def alberdi():
         return 0, 0
 
 
+@handle_exceptions
 def bcp():
-    try:
-        soup = BeautifulSoup(
-            requests.get(
-                "https://www.bcp.gov.py/webapps/web/cotizacion/monedas",
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
-        ref = soup.select("#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)")[
-            0
-        ].get_text()
-        ref = ref.replace(".", "").replace(",", ".")
-        soup = BeautifulSoup(
-            requests.get(
-                "https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante",
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
-        compra_array = soup.find(
-            class_="table table-striped table-bordered table-condensed"
-        ).select("tr > td:nth-of-type(4)")
-        venta_array = soup.find(
-            class_="table table-striped table-bordered table-condensed"
-        ).select("tr > td:nth-of-type(5)")
-        posicion = len(compra_array) - 1
-        compra = compra_array[posicion].get_text().replace(
-            ".", "").replace(",", ".")
-        venta = venta_array[posicion].get_text().replace(
-            ".", "").replace(",", ".")
-            
-    except requests.ConnectionError:
-        compra, venta, ref = 0, 0, 0
-    except:
-        compra, venta, ref = 0, 0, 0
+    soup = BeautifulSoup(
+        requests.get(
+            "https://www.bcp.gov.py/webapps/web/cotizacion/monedas",
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
+    ref = soup.select("#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)")[
+        0
+    ].get_text()
+    ref = ref.replace(".", "").replace(",", ".")
+    soup = BeautifulSoup(
+        requests.get(
+            "https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante",
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
+    compra_array = soup.find(
+        class_="table table-striped table-bordered table-condensed"
+    ).select("tr > td:nth-of-type(4)")
+    venta_array = soup.find(
+        class_="table table-striped table-bordered table-condensed"
+    ).select("tr > td:nth-of-type(5)")
+    posicion = len(compra_array) - 1
+    compra = compra_array[posicion].get_text().replace(
+        ".", "").replace(",", ".")
+    venta = venta_array[posicion].get_text().replace(
+        ".", "").replace(",", ".")
 
     return Decimal(compra), Decimal(venta), Decimal(ref)
 
 
+@handle_exceptions
 def setgov():
-    try:
-        soup = BeautifulSoup(
-            requests.get(
-                "https://www.set.gov.py/portal/PARAGUAY-SET",
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
-        compra = (
-            soup.select("td.UICotizacion")[0].text.replace(
-                "G. ", "").replace(".", "").strip()
-        )
-        venta = (
-            soup.select("td.UICotizacion")[1].text.replace(
-                "G. ", "").replace(".", "").strip()
-        )
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+    soup = BeautifulSoup(
+        requests.get(
+            "https://www.set.gov.py/portal/PARAGUAY-SET",
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
+    compra = (
+        soup.select("td.UICotizacion")[0].text.replace(
+            "G. ", "").replace(".", "").strip()
+    )
+    venta = (
+        soup.select("td.UICotizacion")[1].text.replace(
+            "G. ", "").replace(".", "").strip()
+    )
 
     return Decimal(compra), Decimal(venta)
 
@@ -234,63 +238,53 @@ def setgov():
 #     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def eurocambio():
-    try:
-        url = "https://eurocambios.com.py/v2/sgi/utilsDto.php"
-        data = {"param": "getCotizacionesbySucursal", "sucursal": "1"}
-        result = requests.post(url, data, timeout=10).json()
-        compra = result[0]["compra"]
-        venta = result[0]["venta"]
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+
+    url = "https://eurocambios.com.py/v2/sgi/utilsDto.php"
+    data = {"param": "getCotizacionesbySucursal", "sucursal": "1"}
+    result = requests.post(url, data, timeout=10).json()
+    compra = result[0]["compra"]
+    venta = result[0]["venta"]
 
     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def myd():
-    try:
-        soup = BeautifulSoup(
-            requests.get("https://www.mydcambios.com.py/", timeout=10).text,
-            "html.parser",
-        )
-        compra = soup.select(
-            "div.cambios-banner-text.scrollbox > ul:nth-of-type(2) > li:nth-of-type(2) "
-        )[0].text
-        venta = soup.select(
-            "div.cambios-banner-text.scrollbox > ul:nth-of-type(2) > li:nth-of-type(3) "
-        )[0].text
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+
+    soup = BeautifulSoup(
+        requests.get("https://www.mydcambios.com.py/", timeout=10).text,
+        "html.parser",
+    )
+    compra = soup.select(
+        "div.cambios-banner-text.scrollbox > ul:nth-of-type(2) > li:nth-of-type(2) "
+    )[0].text
+    venta = soup.select(
+        "div.cambios-banner-text.scrollbox > ul:nth-of-type(2) > li:nth-of-type(3) "
+    )[0].text
 
     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def bonanza():
     url = "https://bonanzacambios.com.py/"
-    try:
-        soup = BeautifulSoup(
-            requests.get(
-                url,
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
 
-        tr_dolar = soup.select(".table-pricing.style1 table tbody tr td.moneda")
+    soup = BeautifulSoup(
+        requests.get(
+            url,
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
 
-        compra = tr_dolar[0].get_text().replace('.', '')
-        venta = tr_dolar[1].get_text().replace('.', '')
+    tr_dolar = soup.select(".table-pricing.style1 table tbody tr td.moneda")
 
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+    compra = tr_dolar[0].get_text().replace('.', '')
+    venta = tr_dolar[1].get_text().replace('.', '')
 
     return Decimal(compra), Decimal(venta)
 
@@ -311,74 +305,67 @@ def bonanza():
 #     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def lamoneda():
-    try:
-        # soup = BeautifulSoup(
-        #     requests.get(
-        #         "http://www.lamoneda.com.py/", timeout=10).text,
-        #     "html.parser",
-        # )
-        # casacentral = soup.select("#cotizaciones table tr:nth-of-type(2)")[0]
-        # compra = (
-        #     casacentral.select("td:nth-of-type(3) > div")[0].text.replace(".", "")
-        # )
-        # venta = (
-        #     casacentral.select("td:nth-of-type(4) > div")[0].text.replace(".", "")
-        # )
-        today = datetime.today().strftime("%d%m%Y")
-        url = "http://www.lamoneda.com.py/"
-        soup = BeautifulSoup(
-            requests.get(
-                url,
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
 
-        tr_dolar = soup.find("table").find("tbody").find("tr")
+    # soup = BeautifulSoup(
+    #     requests.get(
+    #         "http://www.lamoneda.com.py/", timeout=10).text,
+    #     "html.parser",
+    # )
+    # casacentral = soup.select("#cotizaciones table tr:nth-of-type(2)")[0]
+    # compra = (
+    #     casacentral.select("td:nth-of-type(3) > div")[0].text.replace(".", "")
+    # )
+    # venta = (
+    #     casacentral.select("td:nth-of-type(4) > div")[0].text.replace(".", "")
+    # )
+    today = datetime.today().strftime("%d%m%Y")
+    url = "http://www.lamoneda.com.py/"
+    soup = BeautifulSoup(
+        requests.get(
+            url,
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+            verify=False,
+        ).text,
+        "html.parser",
+    )
 
-        compra = tr_dolar.find_all('td')[2].text.replace(".", "")
-        venta = tr_dolar.find_all('td')[3].text.replace(".", "")
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+    tr_dolar = soup.find("table").find("tbody").find("tr")
+
+    compra = tr_dolar.find_all('td')[2].text.replace(".", "")
+    venta = tr_dolar.find_all('td')[3].text.replace(".", "")
 
     return Decimal(compra), Decimal(venta)
 
+
+@handle_exceptions
 def bbva():
-    try:
-        soup = requests.get(
-            "https://www.bancognb.com.py/public/currency_quotations", timeout=10
-        ).json()
-        compra = soup["exchangeRates"][0]["cashBuyPrice"]
-        venta = soup["exchangeRates"][0]["cashSellPrice"]
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+
+    soup = requests.get(
+        "https://www.bancognb.com.py/public/currency_quotations", timeout=10
+    ).json()
+    compra = soup["exchangeRates"][0]["cashBuyPrice"]
+    venta = soup["exchangeRates"][0]["cashSellPrice"]
 
     return Decimal(compra), Decimal(venta)
 
 
+@handle_exceptions
 def mundial():
     soup = None
-    try:
-        soup = BeautifulSoup(
-            requests.get('http://www.mundialcambios.com.py/?branch=6',
-                         timeout=20,
-                         headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}).text,
-            "html.parser")
-        compra = soup.select(
-            'h3.divisa')[0].get_text().replace('.', '')
-        venta = soup.select(
-            'h3.divisa')[1].get_text().replace('.', '')
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
+
+    soup = BeautifulSoup(
+        requests.get('http://www.mundialcambios.com.py/?branch=6',
+                     timeout=20,
+                     headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}).text,
+        "html.parser")
+    compra = soup.select(
+        'h3.divisa')[0].get_text().replace('.', '')
+    venta = soup.select(
+        'h3.divisa')[1].get_text().replace('.', '')
+
     return Decimal(compra), Decimal(venta)
 
 
