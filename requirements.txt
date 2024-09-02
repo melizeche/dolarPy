@@ -1,7 +1,7 @@
 beautifulsoup4==4.6.0
 flask>=0.12.3
 tweepy==4.14.0
-gunicorn==19.10.0
+gunicorn==21.2.0
 flask-cors==3.0.9
 requests>=2.20.0
 Mastodon.py==1.6.3
