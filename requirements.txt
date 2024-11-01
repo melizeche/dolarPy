@@ -5,3 +5,4 @@ gunicorn==19.10.0
 flask-cors==3.0.9
 requests>=2.20.0
 Mastodon.py==1.6.3
+werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
