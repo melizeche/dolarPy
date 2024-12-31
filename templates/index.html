@@ -366,6 +366,30 @@
             <div class="mdl-card__title mdl-card--expand">
                 <p class="mdl-card__title-text">Compra:
 
+                    <div class="mdl-card__title-text derecha" id="cfamiliar"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                    <div class="mdl-card__title-text derecha" id="vfamiliar"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Familiar
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="margin-bottom">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
                     <div class="mdl-card__title-text derecha" id="clamoneda"></div>
                 </p>
             </div>
@@ -421,6 +445,8 @@ var wcompra;
 var wventa;
 var cbonanza;
 var vbonanza;
+var cfamiliar;
+var vfamiliar;
 var clamoneda;
 var vlamoneda;
 
@@ -454,6 +480,8 @@ var vlamoneda;
                     wventa = json.dolarpy.mundialcambios.venta;
                     cbonanza = json.dolarpy.bonanza.compra;
                     vbonanza = json.dolarpy.bonanza.venta;
+                    cfamiliar = json.dolarpy.familiar.compra;
+                    vfamiliar = json.dolarpy.familiar.venta;
                     clamoneda = json.dolarpy.lamoneda.compra;
                     vlamoneda = json.dolarpy.lamoneda.venta;
 
@@ -482,6 +510,8 @@ var vlamoneda;
                     $("#wventa").text(wventa).autoNumeric('init');
                     $("#cbonanza").text(cbonanza).autoNumeric('init');
                     $("#vbonanza").text(vbonanza).autoNumeric('init');
+                    $("#cfamiliar").text(cfamiliar).autoNumeric('init');
+                    $("#vfamiliar").text(vfamiliar).autoNumeric('init');
                     $("#clamoneda").text(clamoneda).autoNumeric('init');
                     $("#vlamoneda").text(vlamoneda).autoNumeric('init');
                     $("#cuanto").autoNumeric('init');
