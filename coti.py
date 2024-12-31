@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import json
+import traceback
 import requests
 import urllib3
 
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
+from lxml import etree
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 #urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
@@ -275,20 +277,24 @@ def bonanza():
     return Decimal(compra), Decimal(venta)
 
 
-# def familiar():  # Comentado porque el servidor bloquea las peticiones
-#     try:
-#         soup = BeautifulSoup(
-#             requests.get('https://www.familiar.com.py/', timeout=10).text, "html.parser")
-#         compra = soup.select(
-#             'hgroup:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(2)')[0].get_text().replace('.', '')
-#         venta = soup.select(
-#             'hgroup:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(2)')[0].get_text().replace('.', '')
-#     except requests.ConnectionError:
-#         compra, venta = 0, 0
-#     except:
-#         compra, venta = 0, 0
+def familiar():  # Comentado porque el servidor bloquea las peticiones
+    try:
+        text = requests.get("https://www.familiar.com.py/", timeout=10).text
+        parser = etree.HTMLParser()
+        doc = etree.fromstring(text, parser)
+        dolar_transf = doc.cssselect("#cotizaciones .exchange")[1]
+        compra, venta = [
+            e.text.replace(".", "") for e in dolar_transf.cssselect(".data strong")
+        ]
 
-#     return Decimal(compra), Decimal(venta)
+    except requests.ConnectionError as e:
+        compra, venta = 0, 0
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
 
 
 def lamoneda():
@@ -373,7 +379,7 @@ def create_json():
     eccompra, ecventa = eurocambio()
     mydcompra, mydventa = myd()
     bbvacompra, bbvaventa = bbva()
-    # famicompra, famiventa = familiar()
+    famicompra, famiventa = familiar()
     wcompra, wventa = mundial()
     bonanzacompra, bonanzaventa = bonanza()
     lamonedacompra, lamonedaventa = lamoneda()
@@ -393,10 +399,7 @@ def create_json():
             # "amambay": {"compra": ambcompra, "venta": ambventa},
             "mydcambios": {"compra": mydcompra, "venta": mydventa},
             "eurocambios": {"compra": eccompra, "venta": ecventa},
-            # 'familiar': {
-            #     'compra': famicompra,
-            #     'venta': famiventa
-            # }
+            "familiar": {"compra": famicompra, "venta": famiventa},
             "gnbfusion": {"compra": bbvacompra, "venta": bbvaventa},
             "mundialcambios": {"compra": wcompra, "venta": wventa},
             "bonanza": {
