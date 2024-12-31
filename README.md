@@ -74,6 +74,8 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ## Contributing
 
+If it is a new feature, before contributing, open an issue and ask if your functionality is needed by the project.
+
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
