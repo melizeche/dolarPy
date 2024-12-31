@@ -342,30 +342,6 @@
             <div class="mdl-card__title mdl-card--expand">
                 <p class="mdl-card__title-text">Compra:
 
-                    <div class="mdl-card__title-text derecha" id="cvision"></div>
-                </p>
-            </div>
-            <div class="mdl-card__title mdl-card--expand">
-                <p class="mdl-card__title-text">Venta:
-
-                    <div class="mdl-card__title-text derecha" id="vvision"></div>
-                </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                    Visión Banco
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="margin-bottom">
-
-        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
-            <div class="mdl-card__title mdl-card--expand">
-                <p class="mdl-card__title-text">Compra:
-
                     <div class="mdl-card__title-text derecha" id="cbonanza"></div>
                 </p>
             </div>
@@ -378,6 +354,30 @@
             <div class="mdl-card__actions mdl-card--border">
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
                     Bonanza Cambios
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="margin-bottom">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+
+                    <div class="mdl-card__title-text derecha" id="cfamiliar"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+
+                    <div class="mdl-card__title-text derecha" id="vfamiliar"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Familiar
                 </a>
             </div>
         </div>
@@ -443,10 +443,10 @@ var eccompra;
 var ecventa;
 var wcompra;
 var wventa;
-var cvision;
-var vvision;
 var cbonanza;
 var vbonanza;
+var cfamiliar;
+var vfamiliar;
 var clamoneda;
 var vlamoneda;
 
@@ -478,10 +478,10 @@ var vlamoneda;
                     ecventa = json.dolarpy.eurocambios.venta;
                     wcompra = json.dolarpy.mundialcambios.compra;
                     wventa = json.dolarpy.mundialcambios.venta;
-                    cvision = json.dolarpy.vision.compra;
-                    vvision = json.dolarpy.vision.venta;
                     cbonanza = json.dolarpy.bonanza.compra;
                     vbonanza = json.dolarpy.bonanza.venta;
+                    cfamiliar = json.dolarpy.familiar.compra;
+                    vfamiliar = json.dolarpy.familiar.venta;
                     clamoneda = json.dolarpy.lamoneda.compra;
                     vlamoneda = json.dolarpy.lamoneda.venta;
 
@@ -508,10 +508,10 @@ var vlamoneda;
                     $("#ecventa").text(ecventa).autoNumeric('init');
                     $("#wcompra").text(wcompra).autoNumeric('init');
                     $("#wventa").text(wventa).autoNumeric('init');
-                    $("#cvision").text(cvision).autoNumeric('init');
-                    $("#vvision").text(vvision).autoNumeric('init');
                     $("#cbonanza").text(cbonanza).autoNumeric('init');
                     $("#vbonanza").text(vbonanza).autoNumeric('init');
+                    $("#cfamiliar").text(cfamiliar).autoNumeric('init');
+                    $("#vfamiliar").text(vfamiliar).autoNumeric('init');
                     $("#clamoneda").text(clamoneda).autoNumeric('init');
                     $("#vlamoneda").text(vlamoneda).autoNumeric('init');
                     $("#cuanto").autoNumeric('init');
@@ -593,11 +593,6 @@ var vlamoneda;
             $("#wcompra").text(valor*wcompra).autoNumeric('init');
             $("#wventa").autoNumeric('destroy');
             $("#wventa").text(valor*wventa).autoNumeric('init');
-            //
-            $("#cvision").autoNumeric('destroy');
-            $("#cvision").text(valor*cvision).autoNumeric('init');
-            $("#vvision").autoNumeric('destroy');
-            $("#vvision").text(valor*vvision).autoNumeric('init');
             //
             $("#cbonanza").autoNumeric('destroy');
             $("#cbonanza").text(valor*cbonanza).autoNumeric('init');

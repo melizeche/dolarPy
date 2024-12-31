@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import json
+import traceback
 import requests
 import urllib3
 
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
+from lxml import etree
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 #urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
@@ -19,26 +21,6 @@ def decimal_default(obj):
 
 def format_decimal(number):
     return str(number).replace(".", "").replace(",", ".")
-
-
-def vision():
-    soup = None
-    try:
-        soup = BeautifulSoup(
-            requests.get('https://www.visionbanco.com', timeout=10,
-                         headers={'user-agent': 'Mozilla/5.0'}, verify=False).text, "html.parser")
-
-        efectivo = soup.select('#efectivo')[0]
-        compra = efectivo.select(
-            'table > tr > td:nth-of-type(2) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-        venta = efectivo.select(
-            'table > tr > td:nth-of-type(3) > p:nth-of-type(1)')[0].get_text().replace('.', '')
-    except requests.ConnectionError:
-        compra, venta = 0, 0
-    except:
-        compra, venta = 0, 0
-
-    return Decimal(compra), Decimal(venta)
 
 
 def chaco():
@@ -295,20 +277,26 @@ def bonanza():
     return Decimal(compra), Decimal(venta)
 
 
-# def familiar():  # Comentado porque el servidor bloquea las peticiones
-#     try:
-#         soup = BeautifulSoup(
-#             requests.get('https://www.familiar.com.py/', timeout=10).text, "html.parser")
-#         compra = soup.select(
-#             'hgroup:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(2)')[0].get_text().replace('.', '')
-#         venta = soup.select(
-#             'hgroup:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(2)')[0].get_text().replace('.', '')
-#     except requests.ConnectionError:
-#         compra, venta = 0, 0
-#     except:
-#         compra, venta = 0, 0
+# Uses html5lib parser instead of Beautiful soup because
+# BeautifulSoup parser dies because banco Familiar HTML is malformed
+def familiar():
+    try:
+        text = requests.get("https://www.familiar.com.py/", timeout=10).text
+        parser = etree.HTMLParser()
+        doc = etree.fromstring(text, parser)
+        dolar_transf = doc.cssselect("#cotizaciones .exchange")[1]
+        compra, venta = [
+            e.text.replace(".", "") for e in dolar_transf.cssselect(".data strong")
+        ]
 
-#     return Decimal(compra), Decimal(venta)
+    except requests.ConnectionError as e:
+        compra, venta = 0, 0
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
 
 
 def lamoneda():
@@ -393,9 +381,8 @@ def create_json():
     eccompra, ecventa = eurocambio()
     mydcompra, mydventa = myd()
     bbvacompra, bbvaventa = bbva()
-    # famicompra, famiventa = familiar()
+    famicompra, famiventa = familiar()
     wcompra, wventa = mundial()
-    visioncompra, visionventa = vision()
     bonanzacompra, bonanzaventa = bonanza()
     lamonedacompra, lamonedaventa = lamoneda()
 
@@ -414,24 +401,17 @@ def create_json():
             # "amambay": {"compra": ambcompra, "venta": ambventa},
             "mydcambios": {"compra": mydcompra, "venta": mydventa},
             "eurocambios": {"compra": eccompra, "venta": ecventa},
-            # 'familiar': {
-            #     'compra': famicompra,
-            #     'venta': famiventa
-            # }
+            "familiar": {"compra": famicompra, "venta": famiventa},
             "gnbfusion": {"compra": bbvacompra, "venta": bbvaventa},
             "mundialcambios": {"compra": wcompra, "venta": wventa},
-            'vision': {
-                'compra': visioncompra,
-                'venta': visionventa,
+            "bonanza": {
+                "compra": bonanzacompra,
+                "venta": bonanzaventa,
             },
-            'bonanza': {
-                'compra': bonanzacompra,
-                'venta': bonanzaventa,
+            "lamoneda": {
+                "compra": lamonedacompra,
+                "venta": lamonedaventa,
             },
-            'lamoneda': {
-                'compra': lamonedacompra,
-                'venta': lamonedaventa,
-            }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
