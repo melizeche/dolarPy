@@ -42,7 +42,9 @@ def chaco():
         venta = soup["items"][0]["salePrice"]
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -70,7 +72,9 @@ def maxi():
 
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -107,7 +111,9 @@ def alberdi():
 
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     try:
@@ -180,7 +186,9 @@ def setgov():
         
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -231,7 +239,9 @@ def eurocambio():
         venta = result[0]["venta"]
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -251,7 +261,9 @@ def myd():
         )[0].text
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -277,7 +289,9 @@ def bonanza():
 
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -337,7 +351,9 @@ def lamoneda():
         venta = tr_dolar.find_all('td')[3].text.replace(".", "")
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -351,7 +367,9 @@ def bbva():
         venta = soup["exchangeRates"][0]["cashSellPrice"]
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
 
     return Decimal(compra), Decimal(venta)
@@ -371,8 +389,11 @@ def mundial():
             'h3.divisa')[1].get_text().replace('.', '')
     except requests.ConnectionError:
         compra, venta = 0, 0
-    except:
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
         compra, venta = 0, 0
+
     return Decimal(compra), Decimal(venta)
 
 
