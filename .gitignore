@@ -58,6 +58,10 @@ docs/_build/
 # PyBuilder
 target/
 
+# IDEs
 *.idea
-dolar.json
 .vscode
+
+# Project
+dolar.json
+config.py
