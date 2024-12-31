@@ -277,7 +277,9 @@ def bonanza():
     return Decimal(compra), Decimal(venta)
 
 
-def familiar():  # Comentado porque el servidor bloquea las peticiones
+# Uses html5lib parser instead of Beautiful soup because
+# BeautifulSoup parser dies because banco Familiar HTML is malformed
+def familiar():
     try:
         text = requests.get("https://www.familiar.com.py/", timeout=10).text
         parser = etree.HTMLParser()
