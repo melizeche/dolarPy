@@ -1,17 +1,24 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import json
-import traceback
 import requests
+import traceback
 import urllib3
 
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
 from lxml import etree
+from sys import version_info
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-#urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
+# urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
+
+# Hacky and horrible solution to support different versions of Python and bs4
+if version_info.major == 3 and version_info.minor >= 10:
+    # In Python 3.10 collections.Callable was moved to collections.abc.Callable
+    import collections
+    collections.Callable = collections.abc.Callable
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
