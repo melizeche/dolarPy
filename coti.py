@@ -175,20 +175,22 @@ def setgov():
     try:
         soup = BeautifulSoup(
             requests.get(
-                "https://www.set.gov.py/portal/PARAGUAY-SET",
+                "https://www.dnit.gov.py/en/web/portal-institucional/cotizaciones",
                 timeout=10,
                 headers={"user-agent": "Mozilla/5.0"},
                 verify=False,
             ).text,
             "html.parser",
         )
-        compra = (
-            soup.select("td.UICotizacion")[0].text.replace(
-                "G. ", "").replace(".", "").strip()
+
+        table = soup.select("table")[0]
+
+        last_row = table.select("tbody > tr")[-1]
+        compra = float(
+            last_row.select("td")[1].text.replace(".", "").replace(",", ".").strip()
         )
-        venta = (
-            soup.select("td.UICotizacion")[1].text.replace(
-                "G. ", "").replace(".", "").strip()
+        venta = float(
+            last_row.select("td")[2].text.replace(".", "").replace(",", ".").strip()
         )
     except requests.ConnectionError:
         compra, venta = 0, 0
