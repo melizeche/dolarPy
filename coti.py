@@ -186,12 +186,9 @@ def setgov():
         table = soup.select("table")[0]
 
         last_row = table.select("tbody > tr")[-1]
-        compra = float(
-            last_row.select("td")[1].text.replace(".", "").replace(",", ".").strip()
-        )
-        venta = float(
-            last_row.select("td")[2].text.replace(".", "").replace(",", ".").strip()
-        )
+        compra = last_row.select("td")[1].text.replace(".", "").replace(",", ".").strip()
+        venta = last_row.select("td")[2].text.replace(".", "").replace(",", ".").strip()
+        
     except requests.ConnectionError:
         compra, venta = 0, 0
     except:
