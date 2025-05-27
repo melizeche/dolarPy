@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
+import cloudscraper
 import json
 import requests
 import traceback
@@ -124,6 +125,7 @@ def alberdi():
 
 def bcp():
     try:
+        scraper = cloudscraper.create_scraper()
         url_ref = "https://www.bcp.gov.py/webapps/web/cotizacion/monedas"
         url_fluct = (
             "https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante"
@@ -131,24 +133,10 @@ def bcp():
 
         headers = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Accept-Encoding": "gzip, deflate, br, zstd",
-            "DNT": "1",
             "Connection": "keep-alive",
-            "Upgrade-Insecure-Requests": "1",
-            "Sec-Fetch-Dest": "document",
-            "Sec-Fetch-Mode": "navigate",
-            "Sec-Fetch-Site": "none",
-            "Sec-Fetch-User": "?1",
-            "Sec-GPC": "1",
-            "Priority": "u=0, i",
-            "Pragma": "no-cache",
-            "Cache-Control": "no-cache",
-            "TE": "trailers",
         }
         # Referencial diario
-        response = requests.get(url_ref, headers=headers)
+        response = scraper.get(url_ref, headers=headers)
         soup = BeautifulSoup(response.text, "html.parser")
         ref = soup.select("#cotizacion-interbancaria > tbody > tr > td:nth-of-type(4)")[
             0
@@ -156,7 +144,7 @@ def bcp():
         ref = ref.replace(".", "").replace(",", ".")
 
         # referencial fluctuante
-        response = requests.get(url_fluct, headers=headers)
+        response = scraper.get(url_fluct, headers=headers)
         soup = BeautifulSoup(response.text, "html.parser")
         compra_array = soup.find(
             class_="table table-striped table-bordered table-condensed"

@@ -7,3 +7,4 @@ requests>=2.20.0
 Mastodon.py==1.6.3
 lxml==5.1.0
 cssselect==1.2.0
+cloudscraper==1.2.71
