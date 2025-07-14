@@ -397,10 +397,8 @@ def mundial():
                          timeout=20,
                          headers={'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}).text,
             "html.parser")
-        compra = soup.select(
-            'h3.divisa')[0].get_text().replace('.', '')
-        venta = soup.select(
-            'h3.divisa')[1].get_text().replace('.', '')
+        compra = format_decimal(soup.select('td')[1].get_text())
+        venta = format_decimal(soup.select('td')[2].get_text())
     except requests.ConnectionError:
         compra, venta = 0, 0
     except BaseException as e:
