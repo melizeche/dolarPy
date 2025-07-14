@@ -9,7 +9,6 @@ import urllib3
 from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
-from lxml import etree
 from sys import version_info
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -311,17 +310,12 @@ def bonanza():
     return Decimal(compra), Decimal(venta)
 
 
-# Uses html5lib parser instead of Beautiful soup because
-# BeautifulSoup parser dies because banco Familiar HTML is malformed
 def familiar():
     try:
-        text = requests.get("https://www.familiar.com.py/", timeout=10).text
-        parser = etree.HTMLParser()
-        doc = etree.fromstring(text, parser)
-        dolar_transf = doc.cssselect("#cotizaciones .exchange")[1]
-        compra, venta = [
-            e.text.replace(".", "") for e in dolar_transf.cssselect(".data strong")
-        ]
+        soup = BeautifulSoup(requests.get("https://www.familiar.com.py/", timeout=10).text, 'html.parser')
+
+        compra = soup.findAll(class_='content-item flex-between horizontal-between')[2].findAll(class_='text-m')[1].get_text()
+        venta = soup.findAll(class_='content-item flex-between horizontal-between')[3].findAll(class_='text-m')[1].get_text()
 
     except requests.ConnectionError as e:
         compra, venta = 0, 0
