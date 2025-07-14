@@ -361,8 +361,8 @@ def lamoneda():
 
         tr_dolar = soup.find("table").find("tbody").find("tr")
 
-        compra = tr_dolar.find_all('td')[2].text.replace(".", "")
-        venta = tr_dolar.find_all('td')[3].text.replace(".", "")
+        compra = tr_dolar.find_all('td')[2].text.replace(".", "").strip()
+        venta = tr_dolar.find_all('td')[3].text.replace(".", "").strip()
     except requests.ConnectionError:
         compra, venta = 0, 0
     except BaseException as e:
