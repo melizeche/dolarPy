@@ -103,6 +103,7 @@ If it is a new feature, before contributing, open an issue and ask if your funct
 * Lucas Ginard https://github.com/LucasGinard
 * Padaleiana https://github.com/padaleiana
 * nestorcde https://github.com/nestorcde
+* Ever Leiva https://github.com/EverML
 
 ## TODO(APIv2)
 
