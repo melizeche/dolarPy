@@ -9,3 +9,4 @@ lxml==5.1.0
 cssselect==1.2.0
 cloudscraper==1.2.71
 urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
+werkzeug>=3.1.4 # not directly required, pinned by Snyk to avoid a vulnerability
