@@ -1,0 +1,4 @@
+{
+    "db_connection" : "sqlite:///history.db",
+    "table_name" : "rate_history"
+}
