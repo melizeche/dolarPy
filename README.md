@@ -104,6 +104,7 @@ If it is a new feature, before contributing, open an issue and ask if your funct
 * Padaleiana https://github.com/padaleiana
 * nestorcde https://github.com/nestorcde
 * Ever Leiva https://github.com/EverML
+* Enrique Zárate https://github.com/enrique-zarate
 
 ## TODO(APIv2)
 
