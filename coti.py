@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from sys import version_info
 
+import db
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
@@ -461,11 +463,16 @@ def create_json():
 def get_output():
     with open("dolar.json", "r") as f:
         response = f.read()
+
     return response
 
 
 def write_output():
     response = create_json()
+
+    #If need keep data to DB (sqlite)
+    #db.add(response)
+    
     with open("dolar.json", "w") as f:
         f.write(response)
 
