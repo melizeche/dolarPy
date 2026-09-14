@@ -74,13 +74,32 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ## Tests
 
-The test suite runs fully offline: every source is exercised against a saved
-copy of its markup/JSON, so no test ever touches the real sites.
+There are two suites, split by the question they answer.
+
+**Offline** (default, no network) -- checks that `coti.py` keeps its own
+contract: every source is fetched from the right endpoint, a source that is
+down or redesigned degrades to zeros instead of breaking the other eleven,
+`dolar.json` has the documented shape, and the API serves it.
 
 ```
 pip install -r requirements-dev.txt
 pytest
 ```
+
+**Live** (opt-in) -- asks the real sites whether the scrapers still scrape.
+This is what catches a redesign, and it is what to run while fixing one:
+
+```
+pytest -m live              # every source
+pytest -m live -k maxi      # just one, while tuning its selector
+```
+
+A live failure means the site changed its markup and the selector in `coti.py`
+needs updating (or the site is down/blocking). There is no saved copy of any
+page to keep in sync -- fixing a scraper is a one-file change.
+
+The live suite also runs nightly in GitHub Actions, which opens an issue when a
+check fails on two consecutive runs.
 
 ## Contributing
 

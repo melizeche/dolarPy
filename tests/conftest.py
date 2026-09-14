@@ -38,13 +38,19 @@ def fake_response():
 
 
 @pytest.fixture(autouse=True)
-def block_network(monkeypatch):
-    """Safety net: no test is allowed to reach the real internet.
+def block_network(request, monkeypatch):
+    """Safety net: no offline test is allowed to reach the real internet.
+
+    Tests marked ``live`` are exempt -- reaching the real sites is the point.
 
     The scrapers swallow every exception, so a leaked request would not blow
     up here; it would instead make the assertions on the scraped values fail,
     which is exactly the signal we want.
     """
+
+    if "live" in request.keywords:
+        # The live suite is meant to reach the real sites.
+        return
 
     def _no_network(*args, **kwargs):
         raise RuntimeError(
