@@ -72,6 +72,16 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ```0      8,12,18    * * 1-5 /apps/dolarPy/env/bin/python /apps/dolarPy/single_tweet_bot.py```
 
+## Tests
+
+The test suite runs fully offline: every source is exercised against a saved
+copy of its markup/JSON, so no test ever touches the real sites.
+
+```
+pip install -r requirements-dev.txt
+pytest
+```
+
 ## Contributing
 
 If it is a new feature, before contributing, open an issue and ask if your functionality is needed by the project.

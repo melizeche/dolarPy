@@ -470,4 +470,5 @@ def write_output():
         f.write(response)
 
 
-write_output()
+if __name__ == "__main__":
+    write_output()
