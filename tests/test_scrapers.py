@@ -96,7 +96,7 @@ def patch_scraper(monkeypatch, fake_response):
 # pinning it is cheap and catches an accidental edit.
 
 GET_ENDPOINTS = [
-    ("chaco", "http://www.cambioschaco.com.py/api/branch_office/1/exchange", 10),
+    ("chaco", "https://www.cambioschaco.com.py/api/branch_office/1/exchange", 10),
     ("maxi", "https://www.maxicambios.com.py/", 10),
     (
         "alberdi",

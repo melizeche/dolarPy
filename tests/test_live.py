@@ -71,7 +71,18 @@ def test_rate_is_plausible(rates, name):
         )
 
 
-@pytest.mark.parametrize("name", [n for n, _ in SOURCES])
+# BCP publishes "POR CORTE HORARIO" compra/venta -- the average of the trades
+# actually settled in that hour, not a counter quote -- and those two averages
+# can legitimately cross (seen 2026-10-23: compra 5.774,54 / venta 5.766,62).
+# Every other source here is somebody selling dollars over a counter, where a
+# sell price below the buy price would mean losing money on every transaction,
+# so an inverted spread there really does mean the columns got swapped.
+NO_SPREAD_GUARANTEE = {"bcp"}
+
+SPREAD_SOURCES = [n for n, _ in SOURCES if n not in NO_SPREAD_GUARANTEE]
+
+
+@pytest.mark.parametrize("name", SPREAD_SOURCES)
 def test_sell_price_is_not_below_buy_price(rates, name):
     """An inverted spread means the compra/venta columns got swapped."""
     compra, venta = rates[name][0], rates[name][1]
