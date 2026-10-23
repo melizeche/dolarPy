@@ -34,8 +34,9 @@ def chaco():
     try:
         soup = json.loads(
             requests.get(
-                "http://www.cambioschaco.com.py/api/branch_office/1/exchange",
+                "https://www.cambioschaco.com.py/api/branch_office/1/exchange",
                 timeout=10,
+                headers={"user-agent": "Mozilla/5.0"},
             ).text
         )
         compra = soup["items"][0]["purchasePrice"]
