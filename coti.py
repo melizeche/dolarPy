@@ -403,6 +403,36 @@ def mundial():
 
     return Decimal(compra), Decimal(venta)
 
+def ueno():
+  try:
+    response = requests.get(
+        "https://www.ueno.com.py/en/currency-exchange/",
+        timeout=10,
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36'
+        }
+    )
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    dolar_app = soup.find("div", {"data-currency": "USD", "data-subtitle": "in your app"})
+
+    coti_spans = [span for span in dolar_app.find_all("span") if span.text and "Gs." in span.text]
+
+    if len(coti_spans) == 2:
+        compra = format_decimal(coti_spans[0].get_text().replace("Gs.", "").strip())
+        venta = format_decimal(coti_spans[1].get_text().replace("Gs.", "").strip())
+    else:
+        compra = 0
+        venta = 0
+
+  except requests.ConnectionError:
+    compra, venta = 0, 0
+  except BaseException as e:
+    print("error:", e)
+    print(traceback.format_exc())
+    compra, venta = 0, 0
+
+  return Decimal(compra), Decimal(venta)
 
 def create_json():
     mcompra, mventa = maxi()

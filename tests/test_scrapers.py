@@ -162,6 +162,7 @@ SCRAPERS = [
     coti.lamoneda,
     coti.bbva,
     coti.mundial,
+    coti.ueno
 ]
 
 
