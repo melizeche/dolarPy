@@ -171,7 +171,7 @@ def bcp():
             ".", "").replace(",", ".")
         venta = venta_array[posicion].get_text().replace(
             ".", "").replace(",", ".")
-            
+
     except requests.ConnectionError:
         compra, venta, ref = 0, 0, 0
     except:
@@ -197,7 +197,7 @@ def setgov():
         last_row = table.select("tbody > tr")[-1]
         compra = last_row.select("td")[1].text.replace(".", "").replace(",", ".").strip()
         venta = last_row.select("td")[2].text.replace(".", "").replace(",", ".").strip()
-        
+
     except requests.ConnectionError:
         compra, venta = 0, 0
     except BaseException as e:
@@ -234,8 +234,8 @@ def setgov():
 #                 "https://www.bancobasa.com.py/", timeout=10).text,
 #             "html.parser",
 #         )
-#         compra = soup.select(".trendscontent > li:nth-of-type(1) > a > .compra")[0].text.replace(".", "") 
-#         venta = soup.select(".trendscontent > li:nth-of-type(1) > a > .venta")[0].text.replace(".", "") 
+#         compra = soup.select(".trendscontent > li:nth-of-type(1) > a > .compra")[0].text.replace(".", "")
+#         venta = soup.select(".trendscontent > li:nth-of-type(1) > a > .venta")[0].text.replace(".", "")
 #     except requests.ConnectionError:
 #         compra, venta = 0, 0
 #     except:
@@ -449,6 +449,7 @@ def create_json():
     wcompra, wventa = mundial()
     bonanzacompra, bonanzaventa = bonanza()
     lamonedacompra, lamonedaventa = lamoneda()
+    compraueno, ventaueno = ueno()
 
     respjson = {
         "dolarpy": {
@@ -476,6 +477,10 @@ def create_json():
                 "compra": lamonedacompra,
                 "venta": lamonedaventa,
             },
+            "ueno": {
+                "compra": compraueno,
+                "venta": ventaueno
+            }
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
