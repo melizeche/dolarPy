@@ -105,7 +105,7 @@ GET_ENDPOINTS = [
     ),
     ("setgov", "https://www.dnit.gov.py/en/web/portal-institucional/cotizaciones", 10),
     ("myd", "https://www.mydcambios.com.py/", 10),
-    ("bonanza", "https://bonanzacambios.com.py/", 10),
+    ("bonanza", "https://bonanzacambios.com.py/api/board", 10),
     ("familiar", "https://www.familiar.com.py/", 10),
     ("lamoneda", "http://www.lamoneda.com.py/", 10),
     ("bbva", "https://www.bancognb.com.py/public/currency_quotations", 10),
