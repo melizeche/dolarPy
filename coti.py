@@ -284,22 +284,24 @@ def myd():
 
 
 def bonanza():
-    url = "https://bonanzacambios.com.py/"
+    # In October 2026 the site became a Javascript front end: the HTML it
+    # serves is an empty <div id="root"> with no rates in it, so there is
+    # nothing left to parse. This is the API that front end reads, and the
+    # branch it opens on is Casa Matriz (cod 0).
+    url = "https://bonanzacambios.com.py/api/board"
     try:
-        soup = BeautifulSoup(
-            requests.get(
-                url,
-                timeout=10,
-                headers={"user-agent": "Mozilla/5.0"},
-                verify=False,
-            ).text,
-            "html.parser",
-        )
+        result = requests.get(
+            url,
+            timeout=10,
+            headers={"user-agent": "Mozilla/5.0"},
+        ).json()
 
-        tr_dolar = soup.select(".table-pricing.style1 table tbody tr td.moneda")
+        matriz = next(s for s in result["sucursales"] if s["cod"] == 0)
+        # "prefix" is a stable slug; "moneda" is an accented display name.
+        dolar = next(c for c in matriz["cotizaciones"] if c["prefix"] == "usa")
 
-        compra = tr_dolar[0].get_text().replace('.', '')
-        venta = tr_dolar[1].get_text().replace('.', '')
+        compra = str(dolar["compra"])
+        venta = str(dolar["venta"])
 
     except requests.ConnectionError:
         compra, venta = 0, 0
