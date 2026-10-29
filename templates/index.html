@@ -408,6 +408,28 @@
 
     </div>
 
+    <div class="margin-bottom">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+                    <div class="mdl-card__title-text derecha" id="compraueno"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+                    <div class="mdl-card__title-text derecha" id="ventaueno"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Ueno
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -449,6 +471,8 @@ var cfamiliar;
 var vfamiliar;
 var clamoneda;
 var vlamoneda;
+var compraueno;
+var ventaueno;
 
     function get_coti(){
         $.get("/api/1.0/",
@@ -484,7 +508,8 @@ var vlamoneda;
                     vfamiliar = json.dolarpy.familiar.venta;
                     clamoneda = json.dolarpy.lamoneda.compra;
                     vlamoneda = json.dolarpy.lamoneda.venta;
-
+                    compraueno = json.dolarpy.ueno.compra;
+                    ventaueno = json.dolarpy.ueno.venta;
                     $("#cchaco").text(cchaco).autoNumeric('init');
                     $("#vchaco").text(vchaco).autoNumeric('init');
                     $("#calberdi").text(calberdi).autoNumeric('init');
@@ -514,6 +539,8 @@ var vlamoneda;
                     $("#vfamiliar").text(vfamiliar).autoNumeric('init');
                     $("#clamoneda").text(clamoneda).autoNumeric('init');
                     $("#vlamoneda").text(vlamoneda).autoNumeric('init');
+                    $("#compraueno").text(compraueno).autoNumeric('init');
+                    $("#ventaueno").text(ventaueno).autoNumeric('init');
                     $("#cuanto").autoNumeric('init');
                     $("#updated").text(json.updated);
                 }
@@ -608,7 +635,12 @@ var vlamoneda;
             $("#clamoneda").text(valor*clamoneda).autoNumeric('init');
             $("#vlamoneda").autoNumeric('destroy');
             $("#vlamoneda").text(valor*vlamoneda).autoNumeric('init');
-        });
+
+            $("#compraueno").autoNumeric('destroy');
+            $("#compraueno").text(valor*compraueno).autoNumeric('init');
+            $("#ventaueno").autoNumeric('destroy');
+            $("#ventaueno").text(valor*ventaueno).autoNumeric('init');
+            });
     });
 
 
