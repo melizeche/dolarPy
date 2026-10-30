@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 import cloudscraper
 import json
+import os
 import requests
 import traceback
 import urllib3
@@ -284,10 +285,6 @@ def myd():
 
 
 def bonanza():
-    # In October 2026 the site became a Javascript front end: the HTML it
-    # serves is an empty <div id="root"> with no rates in it, so there is
-    # nothing left to parse. This is the API that front end reads, and the
-    # branch it opens on is Casa Matriz (cod 0).
     url = "https://bonanzacambios.com.py/api/board"
     try:
         result = requests.get(
@@ -407,16 +404,22 @@ def mundial():
 
 def ueno():
   try:
+    # ueno's Cloudflare blocks some datacenter IPs, e.g. UENO_PROXY=socks5h://localhost:1080
+    proxy = os.environ.get("UENO_PROXY")
     response = requests.get(
         "https://www.ueno.com.py/en/currency-exchange/",
         timeout=10,
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36'
-        }
+            'User-Agent': 'Mozilla/5.0'
+        },
+        proxies={"http": proxy, "https": proxy} if proxy else None,
     )
 
     soup = BeautifulSoup(response.text, "html.parser")
     dolar_app = soup.find("div", {"data-currency": "USD", "data-subtitle": "in your app"})
+    if dolar_app is None:
+        print("error: ueno USD block not found, HTTP", response.status_code)
+        return Decimal(0), Decimal(0)
 
     coti_spans = [span for span in dolar_app.find_all("span") if span.text and "Gs." in span.text]
 
