@@ -72,6 +72,18 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ```0      8,12,18    * * 1-5 /apps/dolarPy/env/bin/python /apps/dolarPy/single_tweet_bot.py```
 
+### Ueno proxy (optional)
+
+Ueno's Cloudflare blocks some datacenter IPs (you'll see `error: ueno USD block not found, HTTP 403`). To fetch Ueno through another machine, open a SOCKS tunnel to it and set `UENO_PROXY`; only the Ueno request uses it.
+
+```
+autossh -M 0 -f -N -D 1080 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 user@other-server
+```
+
+```*/10    6-20            * * 1-5 UENO_PROXY=socks5h://localhost:1080 /apps/dolarPy/env/bin/python /apps/dolarPy/coti.py```
+
+To start the tunnel on boot, add the same `autossh` command to your crontab with `@reboot`.
+
 ## Tests
 
 There are two suites, split by the question they answer.
