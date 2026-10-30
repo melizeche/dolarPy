@@ -41,15 +41,17 @@ def fake_response():
 def block_network(request, monkeypatch):
     """Safety net: no offline test is allowed to reach the real internet.
 
-    Tests marked ``live`` are exempt -- reaching the real sites is the point.
+    Tests marked ``live`` or ``published`` are exempt -- reaching the real
+    sites, or the deployed API, is the point.
 
     The scrapers swallow every exception, so a leaked request would not blow
     up here; it would instead make the assertions on the scraped values fail,
     which is exactly the signal we want.
     """
 
-    if "live" in request.keywords:
-        # The live suite is meant to reach the real sites.
+    if "live" in request.keywords or "published" in request.keywords:
+        # The live suite is meant to reach the real sites, and the published
+        # suite the deployed API.
         return
 
     def _no_network(*args, **kwargs):

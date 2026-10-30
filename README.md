@@ -99,7 +99,7 @@ pytest
 ```
 
 **Live** (opt-in) -- asks the real sites whether the scrapers still scrape.
-This is what catches a redesign, and it is what to run while fixing one:
+This is the tool for fixing a broken scraper:
 
 ```
 pytest -m live              # every source
@@ -110,8 +110,26 @@ A live failure means the site changed its markup and the selector in `coti.py`
 needs updating (or the site is down/blocking). There is no saved copy of any
 page to keep in sync -- fixing a scraper is a one-file change.
 
-The live suite also runs nightly in GitHub Actions, which opens an issue when a
-check fails on two consecutive runs.
+Run it from the server, or from an IP the sources do not block: cambioschaco
+and continental serve a block page to datacenter addresses, so these tests
+report false failures from a cloud runner.
+
+**Published** (opt-in) -- checks the API the server actually publishes:
+
+```
+pytest -m published                                      # production
+DOLARPY_API_URL=http://localhost:5000/api/1.0/ pytest -m published
+```
+
+This is the health check: it reads the `dolar.json` the crontab writes and
+fails if a source is zeroed, a rate is implausible, a spread is inverted, a
+source has vanished from the payload, or `updated` has gone stale (which means
+the crontab itself stopped). Because it reads the published document rather
+than scraping, it judges what consumers get from whatever IP the server has.
+
+It runs on weekday mornings in GitHub Actions
+(`.github/workflows/live-scrapers.yml`), which opens an issue when the check
+fails on two consecutive runs and closes it again once the API recovers.
 
 ## Contributing
 
