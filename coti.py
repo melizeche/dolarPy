@@ -439,6 +439,55 @@ def ueno():
 
   return Decimal(compra), Decimal(venta)
 
+
+CONTINENTAL_API = "https://apibanking-gw.bancontinental.com.py/"
+# Public credentials shipped in bancontinental.com.py's own frontend (main.*.js)
+CONTINENTAL_SUBSCRIPTION_KEY = "3c35bb9e5fa948adb8d64c123d9d1a45"
+CONTINENTAL_CLIENT_SECRET = "006f7995-3d33-4afe-8c56-e3b47377092c"
+
+
+def continental():
+    try:
+        # The bearer token only lasts 5 minutes, so get a fresh one every run
+        token = requests.post(
+            CONTINENTAL_API + "autenticarServicio/v1/realms/interno",
+            timeout=10,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Subscription-Key": CONTINENTAL_SUBSCRIPTION_KEY,
+                "Client-Id": "webinstitucional",
+                "Client-Secret": CONTINENTAL_CLIENT_SECRET,
+                "Grant-Type": "client_credentials",
+                "Scope": "profile",
+            },
+        ).json()["access_token"]
+
+        result = requests.get(
+            CONTINENTAL_API + "divisas/v1/api/monedas/cotizaciones",
+            timeout=10,
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Subscription-Key": CONTINENTAL_SUBSCRIPTION_KEY,
+                "Authorization": "Bearer " + token,
+            },
+        ).json()
+
+        # "99" is "DOLAR CHQ./TRANSF."; "01" is "DOLAR EFECTIVO"
+        dolar = next(c for c in result if c["id"] == "99")
+
+        compra = str(dolar["compra"])
+        venta = str(dolar["venta"])
+
+    except requests.ConnectionError:
+        compra, venta = 0, 0
+    except BaseException as e:
+        print("error:", e)
+        print(traceback.format_exc())
+        compra, venta = 0, 0
+
+    return Decimal(compra), Decimal(venta)
+
+
 def create_json():
     mcompra, mventa = maxi()
     ccompra, cventa = chaco()
@@ -455,6 +504,7 @@ def create_json():
     bonanzacompra, bonanzaventa = bonanza()
     lamonedacompra, lamonedaventa = lamoneda()
     compraueno, ventaueno = ueno()
+    conticompra, contiventa = continental()
 
     respjson = {
         "dolarpy": {
@@ -485,7 +535,11 @@ def create_json():
             "ueno": {
                 "compra": compraueno,
                 "venta": ventaueno
-            }
+            },
+            "continental": {
+                "compra": conticompra,
+                "venta": contiventa,
+            },
         },
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }

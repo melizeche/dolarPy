@@ -23,6 +23,7 @@ STUBS = {
     "bonanza": (Decimal("7110"), Decimal("7210")),
     "lamoneda": (Decimal("7111"), Decimal("7211")),
     "ueno": (Decimal("7113"), Decimal("7213")),
+    "continental": (Decimal("7114"), Decimal("7214")),
     "bcp": (Decimal("7112"), Decimal("7212"), Decimal("7312")),
 }
 
@@ -39,6 +40,7 @@ SOURCE_TO_KEY = {
     "bonanza": "bonanza",
     "lamoneda": "lamoneda",
     "ueno": "ueno",
+    "continental": "continental",
     "bcp": "bcp",
 }
 

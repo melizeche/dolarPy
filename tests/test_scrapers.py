@@ -131,6 +131,23 @@ def test_eurocambio_posts_the_expected_payload(patch_post):
     assert kwargs["timeout"] == 10
 
 
+def test_continental_gets_a_token_and_sends_it_to_the_rates_endpoint(patch_get, patch_post):
+    post = patch_post(payload={"access_token": "tok"})
+    get = patch_get(payload=[])
+    coti.continental()
+
+    assert post.url == (
+        "https://apibanking-gw.bancontinental.com.py/autenticarServicio/v1/realms/interno"
+    )
+    assert post.kwargs["timeout"] == 10
+    assert post.kwargs["headers"]["Grant-Type"] == "client_credentials"
+    assert get.url == (
+        "https://apibanking-gw.bancontinental.com.py/divisas/v1/api/monedas/cotizaciones"
+    )
+    assert get.kwargs["timeout"] == 10
+    assert get.kwargs["headers"]["Authorization"] == "Bearer tok"
+
+
 def test_bcp_starts_from_the_referencial_page(patch_scraper):
     """The fluctuante page is only fetched once the first one parses, so a
     stubbed run reaches exactly this one endpoint."""
@@ -164,6 +181,7 @@ SCRAPERS = [
     coti.bbva,
     coti.mundial,
     coti.ueno,
+    coti.continental,
 ]
 
 

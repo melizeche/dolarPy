@@ -430,6 +430,28 @@
 
     </div>
 
+    <div class="margin-bottom">
+
+        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Compra:
+                    <div class="mdl-card__title-text derecha" id="ccontinental"></div>
+                </p>
+            </div>
+            <div class="mdl-card__title mdl-card--expand">
+                <p class="mdl-card__title-text">Venta:
+                    <div class="mdl-card__title-text derecha" id="vcontinental"></div>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Banco Continental
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
@@ -473,6 +495,8 @@ var clamoneda;
 var vlamoneda;
 var compraueno;
 var ventaueno;
+var ccontinental;
+var vcontinental;
 
     function get_coti(){
         $.get("/api/1.0/",
@@ -510,6 +534,8 @@ var ventaueno;
                     vlamoneda = json.dolarpy.lamoneda.venta;
                     compraueno = json.dolarpy.ueno.compra;
                     ventaueno = json.dolarpy.ueno.venta;
+                    ccontinental = json.dolarpy.continental.compra;
+                    vcontinental = json.dolarpy.continental.venta;
                     $("#cchaco").text(cchaco).autoNumeric('init');
                     $("#vchaco").text(vchaco).autoNumeric('init');
                     $("#calberdi").text(calberdi).autoNumeric('init');
@@ -541,6 +567,8 @@ var ventaueno;
                     $("#vlamoneda").text(vlamoneda).autoNumeric('init');
                     $("#compraueno").text(compraueno).autoNumeric('init');
                     $("#ventaueno").text(ventaueno).autoNumeric('init');
+                    $("#ccontinental").text(ccontinental).autoNumeric('init');
+                    $("#vcontinental").text(vcontinental).autoNumeric('init');
                     $("#cuanto").autoNumeric('init');
                     $("#updated").text(json.updated);
                 }
@@ -640,6 +668,11 @@ var ventaueno;
             $("#compraueno").text(valor*compraueno).autoNumeric('init');
             $("#ventaueno").autoNumeric('destroy');
             $("#ventaueno").text(valor*ventaueno).autoNumeric('init');
+
+            $("#ccontinental").autoNumeric('destroy');
+            $("#ccontinental").text(valor*ccontinental).autoNumeric('init');
+            $("#vcontinental").autoNumeric('destroy');
+            $("#vcontinental").text(valor*vcontinental).autoNumeric('init');
             });
     });
 
