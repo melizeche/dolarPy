@@ -105,7 +105,7 @@ GET /api/1.0/history/                                  # every source, last 30 d
 ]}}
 ```
 
-`days` goes from 1 to 366 and counts today. The website shows the same data as a
+`days` goes from 1 to 366 (31 with `by=run`) and counts today. The website shows the same data as a
 chart under the rates, with the change against the previous day and a week ago.
 
 ## Tests

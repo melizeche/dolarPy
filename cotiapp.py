@@ -47,6 +47,11 @@ def api_history():
         )
     if by not in ("day", "run"):
         return json_response({"error": "by must be 'day' or 'run'"}, 400)
+    if by == "run" and days > history.MAX_RUN_DAYS:
+        # every run is ~90 points a day per source; keep the answer small
+        return json_response(
+            {"error": "by=run goes up to %d days" % history.MAX_RUN_DAYS}, 400
+        )
     if source is not None and source not in history.sources():
         return json_response({"error": "no history for source '%s'" % source}, 404)
 

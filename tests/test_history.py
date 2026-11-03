@@ -168,7 +168,7 @@ class TestHistoryApi(object):
         body = json.loads(client.get("/api/1.0/history/?source=familiar&by=run").data)
         assert list(body["history"]["familiar"][0]) == ["time", "compra", "venta"]
 
-    @pytest.mark.parametrize("query", ["days=0", "days=367", "days=abc", "by=week"])
+    @pytest.mark.parametrize("query", ["days=0", "days=367", "days=abc", "by=week", "by=run&days=32"])
     def test_rejects_bad_parameters(self, client, query):
         response = client.get("/api/1.0/history/?" + query)
         assert response.status_code == 400
