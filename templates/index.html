@@ -45,6 +45,23 @@
         .mdl-textfield__input.grande{
         font-size: 40px;
         }
+        .historico.mdl-card {
+        width: auto;
+        max-width: 760px;
+        margin: 0 auto 20px auto;
+        padding: 16px;
+        }
+        .historico select {
+        font-size: 16px;
+        padding: 4px;
+        }
+        .historico-resumen td {
+        padding: 2px 12px 2px 0;
+        }
+        .historico-resumen .sube { color: #2E7D32; }
+        .historico-resumen .baja { color: #C62828; }
+        .historico svg { width: 100%; height: auto; }
+        .historico .leyenda span { margin-right: 16px; }
     </style>
 </head>
 <body style="background-color:#EFEFEF;">
@@ -454,6 +471,26 @@
 
 </div>
 <h6>Actualizado: <span id="updated"></span></h6>
+
+<div class="historico mdl-card mdl-shadow--8dp" id="historico" style="display:none">
+    <h4 class="aldrich">Histórico</h4>
+    <p>
+        <select id="historico-fuente"></select>
+        <select id="historico-dias">
+            <option value="7">7 días</option>
+            <option value="30" selected>30 días</option>
+            <option value="90">90 días</option>
+        </select>
+    </p>
+    <table class="historico-resumen" id="historico-resumen"></table>
+    <div id="historico-grafico"></div>
+    <p class="leyenda">
+        <span style="color:#4CAF50">&#9644; Compra</span>
+        <span style="color:#673AB7">&#9644; Venta</span>
+    </p>
+    <p>API: <a id="historico-api" href="/api/1.0/history/">/api/1.0/history/</a></p>
+</div>
+
 <h5 id="algo">Webservice en <a href="/api/1.0/">https://dolar.melizeche.com/api/1.0/</a></h5>
 <h5 id="algo">Twitter bot <a href="https://twitter.com/dolarpy">@DolarPy</a></h5>
 <h5 id="algo">Mastodon bot <a rel="me" href="https://terere.social/@dolarpy">https://terere.social/@dolarpy</a></h5>
@@ -677,6 +714,131 @@ var vcontinental;
     });
 
 
+</script>
+<script type="text/javascript">
+/* Histórico: GET /api/1.0/history/ and a small hand-drawn SVG chart. */
+(function () {
+    var NOMBRES = {
+        cambioschaco: "Cambios Chaco", cambiosalberdi: "Cambios Alberdi",
+        maxicambios: "Maxicambios", bcp: "BCP", set: "SET",
+        mydcambios: "MyD Cambios", gnbfusion: "GNB Fusión (Ex BBVA)",
+        eurocambios: "Euro Cambios", mundialcambios: "Mundial Cambios",
+        bonanza: "Bonanza Cambios", familiar: "Familiar",
+        lamoneda: "La Moneda Cambios", ueno: "Ueno", continental: "Banco Continental"
+    };
+    var COMPRA = "#4CAF50", VENTA = "#673AB7";
+    var numero = new Intl.NumberFormat("es-PY", {maximumFractionDigits: 2});
+
+    function gs(n) { return n === null || n === undefined ? "-" : "₲ " + numero.format(n); }
+
+    function diferencia(ahora, antes) {
+        if (ahora === null || antes === null || antes === undefined) { return "-"; }
+        var d = ahora - antes;
+        var clase = d > 0 ? "sube" : (d < 0 ? "baja" : "");
+        var signo = d > 0 ? "+" : "";
+        return '<span class="' + clase + '">' + signo + numero.format(d) + "</span>";
+    }
+
+    function haceDias(fecha, dias) {
+        var d = new Date(fecha + "T12:00:00");
+        d.setDate(d.getDate() - dias);
+        return d.toISOString().slice(0, 10);
+    }
+
+    function resumen(puntos) {
+        var hoy = puntos[puntos.length - 1];
+        var ayer = puntos.length > 1 ? puntos[puntos.length - 2] : null;
+        var limite = haceDias(hoy.date, 7), semana = null;
+        for (var i = puntos.length - 1; i >= 0; i--) {
+            if (puntos[i].date <= limite) { semana = puntos[i]; break; }
+        }
+        var filas = '<tr><td></td><td><b>Compra</b></td><td><b>Venta</b></td></tr>' +
+            "<tr><td>Último (" + hoy.date + ")</td><td>" + gs(hoy.compra) + "</td><td>" + gs(hoy.venta) + "</td></tr>";
+        if (ayer) {
+            filas += "<tr><td>vs día anterior (" + ayer.date + ")</td><td>" + diferencia(hoy.compra, ayer.compra) +
+                "</td><td>" + diferencia(hoy.venta, ayer.venta) + "</td></tr>";
+        }
+        if (semana) {
+            filas += "<tr><td>vs hace 7 días (" + semana.date + ")</td><td>" + diferencia(hoy.compra, semana.compra) +
+                "</td><td>" + diferencia(hoy.venta, semana.venta) + "</td></tr>";
+        }
+        $("#historico-resumen").html(filas);
+    }
+
+    function grafico(puntos) {
+        var W = 720, H = 260, izq = 70, der = 16, arriba = 12, abajo = 30;
+        var valores = [];
+        puntos.forEach(function (p) {
+            if (p.compra !== null) { valores.push(p.compra); }
+            if (p.venta !== null) { valores.push(p.venta); }
+        });
+        var min = Math.min.apply(null, valores), max = Math.max.apply(null, valores);
+        var margen = Math.max((max - min) * 0.1, 10);
+        min -= margen; max += margen;
+
+        function x(i) { return puntos.length === 1 ? (izq + W - der) / 2 : izq + i * (W - izq - der) / (puntos.length - 1); }
+        function y(v) { return arriba + (max - v) * (H - arriba - abajo) / (max - min); }
+
+        var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Histórico de compra y venta">';
+        for (var g = 0; g <= 4; g++) {
+            var v = min + (max - min) * g / 4, yy = y(v).toFixed(1);
+            svg += '<line x1="' + izq + '" x2="' + (W - der) + '" y1="' + yy + '" y2="' + yy + '" stroke="#ddd"/>' +
+                '<text x="' + (izq - 6) + '" y="' + yy + '" font-size="11" text-anchor="end" dominant-baseline="middle" fill="#666">' +
+                numero.format(Math.round(v)) + "</text>";
+        }
+        var ultimo = puntos.length - 1;
+        [0, Math.floor(ultimo / 2), ultimo].forEach(function (i, n, todos) {
+            if (n > 0 && i === todos[n - 1]) { return; }
+            // the first and last labels hug the edges so they are not cut off
+            var ancla = ultimo === 0 ? "middle" : (i === 0 ? "start" : (i === ultimo ? "end" : "middle"));
+            svg += '<text x="' + x(i).toFixed(1) + '" y="' + (H - 8) + '" font-size="11" text-anchor="' + ancla + '" fill="#666">' +
+                puntos[i].date + "</text>";
+        });
+        [["compra", COMPRA], ["venta", VENTA]].forEach(function (serie) {
+            var lado = serie[0], color = serie[1], trazo = "", circulos = "";
+            puntos.forEach(function (p, i) {
+                if (p[lado] === null) { return; }
+                var px = x(i).toFixed(1), py = y(p[lado]).toFixed(1);
+                trazo += (trazo ? " L" : "M") + px + " " + py;
+                circulos += '<circle cx="' + px + '" cy="' + py + '" r="3" fill="' + color + '"><title>' +
+                    p.date + " · " + lado + " " + gs(p[lado]) + "</title></circle>";
+            });
+            svg += '<path d="' + trazo + '" fill="none" stroke="' + color + '" stroke-width="2"/>' + circulos;
+        });
+        $("#historico-grafico").html(svg + "</svg>");
+    }
+
+    function mostrar() {
+        var fuente = $("#historico-fuente").val(), dias = $("#historico-dias").val();
+        var url = "/api/1.0/history/?source=" + encodeURIComponent(fuente) + "&days=" + dias;
+        $("#historico-api").attr("href", url).text(url);
+        $.get(url, function (json) {
+            var puntos = json.history[fuente] || [];
+            if (!puntos.length) {
+                $("#historico-resumen").html("<tr><td>Sin datos en este período.</td></tr>");
+                $("#historico-grafico").empty();
+                return;
+            }
+            resumen(puntos);
+            grafico(puntos);
+        });
+    }
+
+    $(document).ready(function () {
+        $.get("/api/1.0/history/?days=30", function (json) {
+            var fuentes = Object.keys(json.history);
+            if (!fuentes.length) { return; }  // no history yet: keep the section hidden
+            fuentes.sort(function (a, b) { return (NOMBRES[a] || a).localeCompare(NOMBRES[b] || b); });
+            fuentes.forEach(function (f) {
+                $("#historico-fuente").append($("<option>").val(f).text(NOMBRES[f] || f));
+            });
+            if (fuentes.indexOf("bcp") >= 0) { $("#historico-fuente").val("bcp"); }
+            $("#historico-fuente, #historico-dias").on("change", mostrar);
+            $("#historico").show();
+            mostrar();
+        });
+    });
+})();
 </script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
