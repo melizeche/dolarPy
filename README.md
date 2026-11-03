@@ -84,6 +84,30 @@ autossh -M 0 -f -N -D 1080 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 us
 
 To start the tunnel on boot, add the same `autossh` command to your crontab with `@reboot`.
 
+### History
+
+Every run of `coti.py` is also stored in `history.sqlite3`, next to `dolar.json`
+(set `DOLARPY_HISTORY_DB` to keep it somewhere else). It uses Python's built-in
+`sqlite3`, so there is nothing to install. A source that returned 0 (down or
+redesigned) is not stored, so it leaves a gap instead of a drop to zero. If the
+history can't be written, `dolar.json` is still updated.
+
+```
+GET /api/1.0/history/?source=familiar&days=30          # one point per day: the day's last rate
+GET /api/1.0/history/?source=familiar&days=1&by=run    # every run, to see when it moved
+GET /api/1.0/history/                                  # every source, last 30 days
+```
+
+```json
+{"days": 30, "by": "day", "history": {"familiar": [
+    {"date": "2026-11-02", "compra": 5900.0, "venta": 6240.0},
+    {"date": "2026-11-03", "compra": 5910.0, "venta": 6250.0}
+]}}
+```
+
+`days` goes from 1 to 366 and counts today. The website shows the same data as a
+chart under the rates, with the change against the previous day and a week ago.
+
 ## Tests
 
 There are two suites, split by the question they answer.
