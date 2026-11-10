@@ -72,17 +72,28 @@ And for tweet the exchange rate at 8am, 12pm and 6pm on weekdays
 
 ```0      8,12,18    * * 1-5 /apps/dolarPy/env/bin/python /apps/dolarPy/single_tweet_bot.py```
 
-### Ueno proxy (optional)
+### Proxy (optional)
 
-Ueno's Cloudflare blocks some datacenter IPs (you'll see `error: ueno USD block not found, HTTP 403`). To fetch Ueno through another machine, open a SOCKS tunnel to it and set `UENO_PROXY`; only the Ueno request uses it.
+Some sources sit behind Cloudflare or firewalls that block datacenter IPs (the scraper then logs an error or a 403 and reports `0` for that source). To fetch them through another machine, open a SOCKS tunnel to it:
 
 ```
 autossh -M 0 -f -N -D 1080 -o ServerAliveInterval=30 -o ServerAliveCountMax=3 user@other-server
 ```
 
-```*/10    6-20            * * 1-5 UENO_PROXY=socks5h://localhost:1080 /apps/dolarPy/env/bin/python /apps/dolarPy/coti.py```
+`requests` honors the standard proxy variables (SOCKS support comes from `PySocks`, already in `requirements.txt`), so this routes every source through the tunnel:
+
+```*/10    6-20            * * 1-5 ALL_PROXY=socks5h://localhost:1080 /apps/dolarPy/env/bin/python /apps/dolarPy/coti.py```
+
+To proxy only the source that needs it, pass `proxies=` to that scraper's request and read the address from its own variable, e.g. `FOO_PROXY`:
+
+```python
+proxy = os.environ.get("FOO_PROXY")
+requests.get(url, timeout=10, proxies={"http": proxy, "https": proxy} if proxy else None)
+```
 
 To start the tunnel on boot, add the same `autossh` command to your crontab with `@reboot`.
+
+This was first set up for Ueno, which was removed after the bank collapsed in November 2026 ([Al Jazeera](https://www.aljazeera.com/news/2026/11/6/how-paraguays-ueno-collapse-is-only-its-latest-banking-crisis)).
 
 ## Tests
 
@@ -90,7 +101,7 @@ There are two suites, split by the question they answer.
 
 **Offline** (default, no network) -- checks that `coti.py` keeps its own
 contract: every source is fetched from the right endpoint, a source that is
-down or redesigned degrades to zeros instead of breaking the other eleven,
+down or redesigned degrades to zeros instead of breaking the others,
 `dolar.json` has the documented shape, and the API serves it.
 
 ```
