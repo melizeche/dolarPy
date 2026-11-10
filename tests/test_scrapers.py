@@ -110,7 +110,6 @@ GET_ENDPOINTS = [
     ("lamoneda", "http://www.lamoneda.com.py/", 10),
     ("bbva", "https://www.bancognb.com.py/public/currency_quotations", 10),
     ("mundial", "http://www.mundialcambios.com.py/?branch=6", 20),
-    ("ueno", "https://www.ueno.com.py/en/currency-exchange/", 10),
 ]
 
 
@@ -180,7 +179,6 @@ SCRAPERS = [
     coti.lamoneda,
     coti.bbva,
     coti.mundial,
-    coti.ueno,
     coti.continental,
 ]
 

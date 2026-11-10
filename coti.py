@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 import cloudscraper
 import json
-import os
 import requests
 import traceback
 import urllib3
@@ -395,44 +394,6 @@ def mundial():
 
     return Decimal(compra), Decimal(venta)
 
-def ueno():
-  try:
-    # ueno's Cloudflare blocks some datacenter IPs, e.g. UENO_PROXY=socks5h://localhost:1080
-    proxy = os.environ.get("UENO_PROXY")
-    response = requests.get(
-        "https://www.ueno.com.py/en/currency-exchange/",
-        timeout=10,
-        headers = {
-            'User-Agent': 'Mozilla/5.0'
-        },
-        proxies={"http": proxy, "https": proxy} if proxy else None,
-    )
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    dolar_app = soup.find("div", {"data-currency": "USD", "data-subtitle": "in your app"})
-    if dolar_app is None:
-        print("error: ueno USD block not found, HTTP", response.status_code)
-        return Decimal(0), Decimal(0)
-
-    coti_spans = [span for span in dolar_app.find_all("span") if span.text and "Gs." in span.text]
-
-    if len(coti_spans) == 2:
-        compra = format_decimal(coti_spans[0].get_text().replace("Gs.", "").strip())
-        venta = format_decimal(coti_spans[1].get_text().replace("Gs.", "").strip())
-    else:
-        compra = 0
-        venta = 0
-
-  except requests.ConnectionError:
-    compra, venta = 0, 0
-  except BaseException as e:
-    print("error:", e)
-    print(traceback.format_exc())
-    compra, venta = 0, 0
-
-  return Decimal(compra), Decimal(venta)
-
-
 CONTINENTAL_API = "https://apibanking-gw.bancontinental.com.py/"
 # Public credentials shipped in bancontinental.com.py's own frontend (main.*.js)
 CONTINENTAL_SUBSCRIPTION_KEY = "3c35bb9e5fa948adb8d64c123d9d1a45"
@@ -496,7 +457,6 @@ def create_json():
     wcompra, wventa = mundial()
     bonanzacompra, bonanzaventa = bonanza()
     lamonedacompra, lamonedaventa = lamoneda()
-    compraueno, ventaueno = ueno()
     conticompra, contiventa = continental()
 
     respjson = {
@@ -524,10 +484,6 @@ def create_json():
             "lamoneda": {
                 "compra": lamonedacompra,
                 "venta": lamonedaventa,
-            },
-            "ueno": {
-                "compra": compraueno,
-                "venta": ventaueno
             },
             "continental": {
                 "compra": conticompra,

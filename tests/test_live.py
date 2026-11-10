@@ -45,7 +45,6 @@ SOURCES = [
     ("lamoneda", coti.lamoneda),
     ("gnbfusion", coti.bbva),
     ("mundialcambios", coti.mundial),
-    ("ueno", coti.ueno),
     ("continental", coti.continental),
 ]
 

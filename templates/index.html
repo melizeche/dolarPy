@@ -413,28 +413,6 @@
         <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
             <div class="mdl-card__title mdl-card--expand">
                 <p class="mdl-card__title-text">Compra:
-                    <div class="mdl-card__title-text derecha" id="compraueno"></div>
-                </p>
-            </div>
-            <div class="mdl-card__title mdl-card--expand">
-                <p class="mdl-card__title-text">Venta:
-                    <div class="mdl-card__title-text derecha" id="ventaueno"></div>
-                </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                    Ueno
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="margin-bottom">
-
-        <div class="dolarpy-card-square mdl-card mdl-shadow--8dp">
-            <div class="mdl-card__title mdl-card--expand">
-                <p class="mdl-card__title-text">Compra:
                     <div class="mdl-card__title-text derecha" id="ccontinental"></div>
                 </p>
             </div>
@@ -493,8 +471,6 @@ var cfamiliar;
 var vfamiliar;
 var clamoneda;
 var vlamoneda;
-var compraueno;
-var ventaueno;
 var ccontinental;
 var vcontinental;
 
@@ -532,8 +508,6 @@ var vcontinental;
                     vfamiliar = json.dolarpy.familiar.venta;
                     clamoneda = json.dolarpy.lamoneda.compra;
                     vlamoneda = json.dolarpy.lamoneda.venta;
-                    compraueno = json.dolarpy.ueno.compra;
-                    ventaueno = json.dolarpy.ueno.venta;
                     ccontinental = json.dolarpy.continental.compra;
                     vcontinental = json.dolarpy.continental.venta;
                     $("#cchaco").text(cchaco).autoNumeric('init');
@@ -565,8 +539,6 @@ var vcontinental;
                     $("#vfamiliar").text(vfamiliar).autoNumeric('init');
                     $("#clamoneda").text(clamoneda).autoNumeric('init');
                     $("#vlamoneda").text(vlamoneda).autoNumeric('init');
-                    $("#compraueno").text(compraueno).autoNumeric('init');
-                    $("#ventaueno").text(ventaueno).autoNumeric('init');
                     $("#ccontinental").text(ccontinental).autoNumeric('init');
                     $("#vcontinental").text(vcontinental).autoNumeric('init');
                     $("#cuanto").autoNumeric('init');
@@ -663,11 +635,6 @@ var vcontinental;
             $("#clamoneda").text(valor*clamoneda).autoNumeric('init');
             $("#vlamoneda").autoNumeric('destroy');
             $("#vlamoneda").text(valor*vlamoneda).autoNumeric('init');
-
-            $("#compraueno").autoNumeric('destroy');
-            $("#compraueno").text(valor*compraueno).autoNumeric('init');
-            $("#ventaueno").autoNumeric('destroy');
-            $("#ventaueno").text(valor*ventaueno).autoNumeric('init');
 
             $("#ccontinental").autoNumeric('destroy');
             $("#ccontinental").text(valor*ccontinental).autoNumeric('init');
