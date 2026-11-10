@@ -64,6 +64,7 @@ target/
 
 # Project
 dolar.json
+history.sqlite3
 config.py
 
 # pytest

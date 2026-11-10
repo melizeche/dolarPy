@@ -11,6 +11,8 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+import history
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
 
@@ -556,6 +558,12 @@ def write_output():
     response = create_json()
     with open("dolar.json", "w") as f:
         f.write(response)
+    # The history is an extra: if it can't be written (disk, permissions),
+    # dolar.json above is already up to date and the API keeps working.
+    try:
+        history.record(response)
+    except Exception as e:
+        print("error: could not store this run in the history:", e)
 
 
 if __name__ == "__main__":
