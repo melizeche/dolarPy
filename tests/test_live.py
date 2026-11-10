@@ -14,9 +14,12 @@ selector in coti.py needs updating. The nightly workflow
 (.github/workflows/live-scrapers.yml) runs this and opens an issue when a
 check fails twice in a row, so a single flaky night stays quiet.
 """
+import os
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
+import requests
 
 import coti
 
@@ -47,10 +50,30 @@ SOURCES = [
 ]
 
 
+# Sites that block (or intermittently drop) GitHub's datacenter IPs. On CI they
+# are not scraped directly; test_production_api_has_rates checks them through
+# the production server instead, which can still reach them.
+BLOCKS_CI = {"cambioschaco", "mundialcambios"}
+ON_CI = bool(os.environ.get("GITHUB_ACTIONS"))
+
+PRODUCTION_API = "https://dolar.melizeche.com/api/1.0/"
+
+
 @pytest.fixture(scope="module")
 def rates():
     """Scrape every source once, so the suite hits each site a single time."""
-    return {name: scraper() for name, scraper in SOURCES}
+    return {
+        name: scraper()
+        for name, scraper in SOURCES
+        if not (ON_CI and name in BLOCKS_CI)
+    }
+
+
+@pytest.fixture(autouse=True)
+def skip_sources_that_block_ci(request):
+    name = request.node.callspec.params.get("name") if hasattr(request.node, "callspec") else None
+    if ON_CI and name in BLOCKS_CI:
+        pytest.skip("%s blocks GitHub's IPs; covered by test_production_api_has_rates" % name)
 
 
 @pytest.mark.parametrize("name", [n for n, _ in SOURCES])
@@ -95,3 +118,30 @@ def test_bcp_also_returns_the_daily_reference(rates):
     ref = rates["bcp"][2]
     assert ref != 0, "BCP referencial diario returned 0"
     assert MIN_RATE <= ref <= MAX_RATE
+
+
+@pytest.fixture(scope="module")
+def production():
+    response = requests.get(PRODUCTION_API, timeout=20)
+    response.raise_for_status()
+    return response.json()
+
+
+@pytest.mark.parametrize("source", sorted(BLOCKS_CI))
+def test_production_api_has_rates(production, source):
+    """Sources CI can't reach directly must still be scraped by the server."""
+    rate = production["dolarpy"][source]
+    for label in ("compra", "venta"):
+        value = Decimal(str(rate[label]))
+        assert MIN_RATE <= value <= MAX_RATE, (
+            "production %s %s = %s -- the scraper is failing on the server too"
+            % (source, label, value)
+        )
+
+
+def test_production_api_is_fresh(production):
+    # The cron only runs on weekdays 06-20, so allow for a long weekend.
+    updated = datetime.strptime(production["updated"], "%Y-%m-%d %H:%M:%S")
+    assert datetime.now() - updated < timedelta(days=4), (
+        "production data last updated %s -- the cron on the server stopped" % updated
+    )

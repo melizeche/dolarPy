@@ -21,9 +21,9 @@ jobs:
   live:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -41,7 +41,7 @@ jobs:
 
       - name: Look up the previous nightly result
         id: previous
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const runs = await github.rest.actions.listWorkflowRuns({
@@ -61,7 +61,7 @@ jobs:
 
       - name: Open or update the issue after a second failure
         if: steps.live.outcome == 'failure' && steps.previous.outputs.conclusion == 'failure'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           TITLE: "Live scraper check is failing"
         with:
@@ -126,7 +126,7 @@ jobs:
 
       - name: Close the issue once the sources are back
         if: steps.live.outcome == 'success'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           TITLE: "Live scraper check is failing"
         with:
