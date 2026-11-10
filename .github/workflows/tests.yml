@@ -7,11 +7,16 @@ on:
 
 jobs:
   pytest:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         python-version: ["3.11", "3.12"]
+        include:
+          # Ubuntu 26.04 (ubuntu-latest) has no Python 3.9 build
+          - os: ubuntu-24.04
+            python-version: "3.9"
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
